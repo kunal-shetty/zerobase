@@ -1,6 +1,6 @@
 {
   "name": "zerobase-cli",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A CLI-first, SQL-driven local database system using JSON files — no server required.",
   "main": "src/index.js",
   "bin": {
