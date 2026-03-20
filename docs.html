@@ -1,282 +1,1180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Docs — Zerobase</title>
-<link rel="icon" type="image/png" href="assets/icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#080b10;--bg2:#0b0f16;--bg3:#111720;--surface:#0d1117;
-  --border:#1a2535;--border2:#243040;
-  --cyan:#00e5ff;--cyan-l:rgba(0,229,255,.12);--cyan-ll:rgba(0,229,255,.06);
-  --blue:#3b82f6;--purple:#8b5cf6;--green:#22c55e;--green-l:rgba(34,197,94,.1);
-  --yellow:#f59e0b;--red:#ef4444;--red-l:rgba(239,68,68,.09);
-  --text:#e2e8f0;--text2:#94a3b8;--text3:#475569;
-  --nav-h:64px;--left-w:252px;--right-w:288px;
-  --ease:cubic-bezier(.4,0,.2,1);
-}
-html{scroll-behavior:smooth}
-body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.35}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docs — Zerobase</title>
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* ── NAV ── */
-.docs-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:200;background:rgba(8,11,16,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-inner{padding:0 0 0 0;height:100%;display:grid;grid-template-columns:var(--left-w) 1fr var(--right-w);align-items:center}
-.nav-logo-area{padding:0 20px;border-right:1px solid var(--border);height:100%;display:flex;align-items:center}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.92rem;font-weight:600;color:var(--cyan)}
-.logo-mark{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-mark img{width:100%;height:100%;object-fit:contain}
-.logo-sep{color:var(--text3);margin:0 4px}
-.logo-section{color:var(--text3);font-size:.82rem;font-weight:400}
-.nav-search{padding:0 24px;display:flex;align-items:center;gap:12px}
-.search-box{flex:1;max-width:420px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s}
-.search-box:hover{border-color:var(--border2)}
-.search-box svg{width:14px;height:14px;color:var(--text3);flex-shrink:0}
-.search-box span{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--text3)}
-.search-box kbd{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:.65rem;background:var(--border);color:var(--text3);padding:2px 6px;border-radius:4px}
-.nav-actions{padding:0 20px;border-left:1px solid var(--border);height:100%;display:flex;align-items:center;gap:8px;justify-content:flex-end}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:7px;font-family:'Bricolage Grotesque',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .2s var(--ease);text-decoration:none;white-space:nowrap}
-.btn svg{width:14px;height:14px}
-.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
-.btn-ghost:hover{background:var(--bg3);color:var(--text)}
-.btn-primary{background:var(--cyan);color:#080b10}
-.btn-primary:hover{box-shadow:0 4px 16px rgba(0,229,255,.3);transform:translateY(-1px)}
+    :root {
+      --bg: #080b10;
+      --bg2: #0b0f16;
+      --bg3: #111720;
+      --surface: #0d1117;
+      --border: #1a2535;
+      --border2: #243040;
+      --cyan: #00e5ff;
+      --cyan-l: rgba(0, 229, 255, .12);
+      --cyan-ll: rgba(0, 229, 255, .06);
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --green: #22c55e;
+      --green-l: rgba(34, 197, 94, .1);
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --red-l: rgba(239, 68, 68, .09);
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #475569;
+      --nav-h: 64px;
+      --left-w: 252px;
+      --right-w: 288px;
+      --ease: cubic-bezier(.4, 0, .2, 1);
+    }
 
-/* ── 3-COL LAYOUT ── */
-.docs-layout{display:grid;grid-template-columns:var(--left-w) 1fr var(--right-w);min-height:calc(100vh - var(--nav-h));margin-top:var(--nav-h)}
+    html {
+      scroll-behavior: smooth
+    }
 
-/* ── LEFT SIDEBAR ── */
-.docs-sidebar{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0}
-.docs-sidebar::-webkit-scrollbar{width:3px}
-.docs-sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.sidebar-group{margin-bottom:24px}
-.sidebar-group-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);padding:0 18px 8px}
-.sidebar-link{display:flex;align-items:center;gap:9px;padding:7px 18px;font-size:.85rem;font-weight:500;color:var(--text2);text-decoration:none;transition:all .15s;border-left:2px solid transparent;position:relative}
-.sidebar-link svg{width:13px;height:13px;flex-shrink:0;color:var(--text3);transition:color .15s}
-.sidebar-link:hover{color:var(--text);background:rgba(0,229,255,.04);border-left-color:rgba(0,229,255,.3)}
-.sidebar-link:hover svg{color:var(--cyan)}
-.sidebar-link.active{color:var(--cyan);background:var(--cyan-ll);border-left-color:var(--cyan);font-weight:600}
-.sidebar-link.active svg{color:var(--cyan)}
-.sidebar-badge{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:1px 7px;border-radius:100px}
+    body {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden
+    }
 
-/* ── CENTER CONTENT ── */
-.docs-content{padding:52px 56px 100px;min-width:0;border-right:1px solid var(--border)}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .35
+    }
 
-/* section anchors */
-.doc-section{margin-bottom:72px;scroll-margin-top:calc(var(--nav-h) + 20px)}
+    /* ── NAV ── */
+    .docs-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-h);
+      z-index: 200;
+      background: rgba(8, 11, 16, .92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border)
+    }
 
-/* page header */
-.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--cyan);font-weight:500;text-transform:uppercase;letter-spacing:.14em;display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.page-eyebrow svg{width:12px;height:12px}
-h1.page-title{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:14px}
-p.page-lead{font-size:1rem;color:var(--text2);line-height:1.78;max-width:580px;margin-bottom:36px}
+    .nav-inner {
+      padding: 0 0 0 0;
+      height: 100%;
+      display: grid;
+      grid-template-columns: var(--left-w) 1fr var(--right-w);
+      align-items: center
+    }
 
-/* section headings */
-h2.sh{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;margin-bottom:10px;display:flex;align-items:center;gap:10px;padding-top:8px}
-h2.sh svg{width:18px;height:18px;color:var(--cyan);flex-shrink:0}
-h3.ssh{font-family:'IBM Plex Mono',monospace;font-size:.88rem;font-weight:600;color:var(--text);margin:24px 0 9px;display:flex;align-items:center;gap:7px}
-h3.ssh svg{width:13px;height:13px;color:var(--cyan)}
-p.body{font-size:.92rem;color:var(--text2);line-height:1.78;margin-bottom:12px}
-ul.blist{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
-ul.blist li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;color:var(--text2);line-height:1.65}
-ul.blist li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--cyan);flex-shrink:0;margin-top:9px}
-hr.div{border:none;border-top:1px solid var(--border);margin:56px 0}
-code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);background:var(--cyan-ll);padding:2px 6px;border-radius:4px;border:1px solid rgba(0,229,255,.1)}
+    .nav-logo-area {
+      padding: 0 20px;
+      border-right: 1px solid var(--border);
+      height: 100%;
+      display: flex;
+      align-items: center
+    }
 
-/* CODE BLOCKS */
-.cb{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0 20px}
-.cb-bar{background:#060c12;padding:9px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.cb-left{display:flex;align-items:center;gap:8px}
-.cb-dots{display:flex;gap:5px}
-.cd{width:10px;height:10px;border-radius:50%}
-.cd.r{background:#ff5f57}.cd.y{background:#ffbd2e}.cd.g{background:#28ca41}
-.cb-lang{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--text3);letter-spacing:.06em}
-.cb-file{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--text2)}
-.cb-copy{background:transparent;border:none;color:var(--text3);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:.65rem;display:flex;align-items:center;gap:4px;transition:color .2s;padding:3px 8px;border-radius:4px}
-.cb-copy svg{width:11px;height:11px}
-.cb-copy:hover{color:var(--cyan);background:var(--cyan-ll)}
-.cb pre{padding:20px;font-family:'IBM Plex Mono',monospace;font-size:.8rem;line-height:1.85;overflow-x:auto;color:var(--text)}
-.kw{color:#60a5fa}.tb{color:var(--cyan)}.str{color:#fbbf24}.num{color:#c4b5fd}.op{color:var(--text3)}.cm{color:var(--text3);font-style:italic}.ok{color:var(--green)}.pr{color:var(--cyan)}.err{color:#f87171}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--cyan)
+    }
 
-/* CALLOUTS */
-.callout{border-radius:9px;padding:14px 18px;margin:14px 0 20px;display:flex;gap:12px;align-items:flex-start;font-size:.87rem;line-height:1.7}
-.callout svg{width:16px;height:16px;flex-shrink:0;margin-top:2px}
-.callout.info{background:var(--cyan-ll);border:1px solid rgba(0,229,255,.14);color:var(--text2)}.callout.info svg{color:var(--cyan)}
-.callout.warn{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);color:var(--text2)}.callout.warn svg{color:var(--yellow)}
-.callout.success{background:var(--green-l);border:1px solid rgba(34,197,94,.18);color:var(--text2)}.callout.success svg{color:var(--green)}
-.callout.error{background:var(--red-l);border:1px solid rgba(239,68,68,.18);color:var(--text2)}.callout.error svg{color:var(--red)}
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
 
-/* TABLES */
-.dt{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:.84rem}
-.dt th{font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);text-align:left;padding:9px 12px;background:var(--bg3);border-bottom:1px solid var(--border)}
-.dt td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6}
-.dt tr:last-child td{border-bottom:none}
-.dt tr:hover td{background:rgba(255,255,255,.015)}
-.tbadge{font-family:'IBM Plex Mono',monospace;font-size:.7rem;padding:2px 8px;border-radius:4px;background:var(--cyan-ll);color:var(--cyan);border:1px solid rgba(0,229,255,.15)}
+    .logo-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain
+    }
 
-/* CMD CARDS */
-.cmd-list{display:flex;flex-direction:column;gap:10px;margin:12px 0 20px}
-.cmd-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:border-color .2s}
-.cmd-card:hover{border-color:rgba(0,229,255,.2)}
-.cmd-card-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.cmd-name{font-family:'IBM Plex Mono',monospace;font-size:.85rem;font-weight:600;color:var(--cyan)}
-.cmd-tag{font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:100px;background:var(--bg3);color:var(--text3);border:1px solid var(--border);margin-left:auto}
-.cmd-desc{font-size:.84rem;color:var(--text2);line-height:1.65;margin-bottom:9px}
-.cmd-usage{font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--text);background:var(--bg3);padding:7px 11px;border-radius:6px;border:1px solid var(--border)}
+    .logo-sep {
+      color: var(--text3);
+      margin: 0 4px
+    }
 
-/* PAGINATION */
-.pagination{display:flex;justify-content:space-between;margin-top:60px;padding-top:24px;border-top:1px solid var(--border);gap:12px}
-.pg-btn{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text2);padding:12px 16px;border-radius:8px;border:1px solid var(--border);transition:all .2s;font-size:.85rem;flex:1}
-.pg-btn:hover{border-color:rgba(0,229,255,.3);color:var(--cyan);background:var(--cyan-ll)}
-.pg-btn svg{width:16px;height:16px;flex-shrink:0}
-.pg-btn .pg-label{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--text3);display:block;margin-bottom:2px}
-.pg-btn.next{justify-content:flex-end;text-align:right}
+    .logo-section {
+      color: var(--text3);
+      font-size: .82rem;
+      font-weight: 400
+    }
 
-/* ── RIGHT PANEL ── */
-.docs-right{position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--bg2);padding:0}
-.docs-right::-webkit-scrollbar{width:3px}
-.docs-right::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+    .nav-search {
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
 
-/* ON THIS PAGE */
-.toc-wrap{padding:24px 20px;border-bottom:1px solid var(--border)}
-.toc-label{font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.toc-label svg{width:11px;height:11px}
-.toc-link{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;font-size:.8rem;color:var(--text3);text-decoration:none;transition:all .15s;border-left:2px solid transparent;margin-bottom:1px}
-.toc-link svg{width:11px;height:11px;flex-shrink:0}
-.toc-link:hover{color:var(--text2);background:rgba(255,255,255,.03)}
-.toc-link.active{color:var(--cyan);background:var(--cyan-ll);border-left-color:var(--cyan)}
-.toc-link.active svg{color:var(--cyan)}
-.toc-link.sub{padding-left:20px;font-size:.76rem}
+    .search-box {
+      flex: 1;
+      max-width: 420px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color .2s
+    }
 
-/* QUICK REF CARD */
-.quick-ref{padding:20px}
-.qr-label{font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.qr-label svg{width:11px;height:11px}
-.qr-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px}
-.qr-bar{background:#060c12;padding:7px 12px;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--text3);display:flex;align-items:center;gap:6px}
-.qr-bar svg{width:10px;height:10px}
-.qr-pre{padding:12px;font-family:'IBM Plex Mono',monospace;font-size:.72rem;line-height:1.8;color:var(--text);overflow-x:auto}
+    .search-box:hover {
+      border-color: var(--border2)
+    }
 
-/* STATS STRIP */
-.stats-strip{padding:16px 20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
-.stat-row{display:flex;align-items:center;justify-content:space-between}
-.stat-label-r{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--text3);display:flex;align-items:center;gap:6px}
-.stat-label-r svg{width:11px;height:11px}
-.stat-val{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;color:var(--cyan)}
+    .search-box svg {
+      width: 14px;
+      height: 14px;
+      color: var(--text3);
+      flex-shrink: 0
+    }
 
-/* RESPONSIVE */
-@media(max-width:1200px){.docs-layout{grid-template-columns:var(--left-w) 1fr}.docs-right{display:none}.nav-inner{grid-template-columns:var(--left-w) 1fr auto}}
-@media(max-width:768px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{display:none}.docs-content{padding:32px 24px 60px}.nav-inner{grid-template-columns:1fr auto}.nav-logo-area{border-right:none}.nav-search{display:none}}
-</style>
+    .search-box span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .78rem;
+      color: var(--text3)
+    }
+
+    .search-box kbd {
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      background: var(--border);
+      color: var(--text3);
+      padding: 2px 6px;
+      border-radius: 4px
+    }
+
+    .nav-actions {
+      padding: 0 20px;
+      border-left: 1px solid var(--border);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 7px;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .2s var(--ease);
+      text-decoration: none;
+      white-space: nowrap
+    }
+
+    .btn svg {
+      width: 14px;
+      height: 14px
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text2);
+      border: 1px solid var(--border)
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg3);
+      color: var(--text)
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: #080b10
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 4px 16px rgba(0, 229, 255, .3);
+      transform: translateY(-1px)
+    }
+
+    /* ── 3-COL LAYOUT ── */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: var(--left-w) 1fr var(--right-w);
+      min-height: calc(100vh - var(--nav-h));
+      margin-top: var(--nav-h)
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .docs-sidebar {
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 20px 0
+    }
+
+    .docs-sidebar::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .docs-sidebar::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px
+    }
+
+    .sidebar-group {
+      margin-bottom: 24px
+    }
+
+    .sidebar-group-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--text3);
+      padding: 0 18px 8px
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 18px;
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      transition: all .15s;
+      border-left: 2px solid transparent;
+      position: relative
+    }
+
+    .sidebar-link svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      color: var(--text3);
+      transition: color .15s
+    }
+
+    .sidebar-link:hover {
+      color: var(--text);
+      background: rgba(0, 229, 255, .04);
+      border-left-color: rgba(0, 229, 255, .3)
+    }
+
+    .sidebar-link:hover svg {
+      color: var(--cyan)
+    }
+
+    .sidebar-link.active {
+      color: var(--cyan);
+      background: var(--cyan-ll);
+      border-left-color: var(--cyan);
+      font-weight: 600
+    }
+
+    .sidebar-link.active svg {
+      color: var(--cyan)
+    }
+
+    .sidebar-badge {
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .6rem;
+      padding: 1px 7px;
+      border-radius: 100px
+    }
+
+    /* ── CENTER CONTENT ── */
+    .docs-content {
+      padding: 52px 56px 100px;
+      min-width: 0;
+      border-right: 1px solid var(--border)
+    }
+
+    /* section anchors */
+    .doc-section {
+      margin-bottom: 72px;
+      scroll-margin-top: calc(var(--nav-h) + 20px)
+    }
+
+    /* page header */
+    .page-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .7rem;
+      color: var(--cyan);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px
+    }
+
+    .page-eyebrow svg {
+      width: 12px;
+      height: 12px
+    }
+
+    h1.page-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      margin-bottom: 14px
+    }
+
+    p.page-lead {
+      font-size: 1rem;
+      color: var(--text2);
+      line-height: 1.78;
+      max-width: 580px;
+      margin-bottom: 36px
+    }
+
+    /* section headings */
+    h2.sh {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 8px
+    }
+
+    h2.sh svg {
+      width: 18px;
+      height: 18px;
+      color: var(--cyan);
+      flex-shrink: 0
+    }
+
+    h3.ssh {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 24px 0 9px;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    h3.ssh svg {
+      width: 13px;
+      height: 13px;
+      color: var(--cyan)
+    }
+
+    p.body {
+      font-size: .92rem;
+      color: var(--text2);
+      line-height: 1.78;
+      margin-bottom: 12px
+    }
+
+    ul.blist {
+      padding-left: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px
+    }
+
+    ul.blist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .88rem;
+      color: var(--text2);
+      line-height: 1.65
+    }
+
+    ul.blist li::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+      margin-top: 9px
+    }
+
+    hr.div {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 56px 0
+    }
+
+    code.ic {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .8em;
+      color: var(--cyan);
+      background: var(--cyan-ll);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 229, 255, .1)
+    }
+
+    /* CODE BLOCKS */
+    .cb {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px
+    }
+
+    .cb-bar {
+      background: #060c12;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px
+    }
+
+    .cb-left {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .cb-dots {
+      display: flex;
+      gap: 5px
+    }
+
+    .cd {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .cd.r {
+      background: #ff5f57
+    }
+
+    .cd.y {
+      background: #ffbd2e
+    }
+
+    .cd.g {
+      background: #28ca41
+    }
+
+    .cb-lang {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      letter-spacing: .06em
+    }
+
+    .cb-file {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      color: var(--text2)
+    }
+
+    .cb-copy {
+      background: transparent;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color .2s;
+      padding: 3px 8px;
+      border-radius: 4px
+    }
+
+    .cb-copy svg {
+      width: 11px;
+      height: 11px
+    }
+
+    .cb-copy:hover {
+      color: var(--cyan);
+      background: var(--cyan-ll)
+    }
+
+    .cb pre {
+      padding: 20px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.85;
+      overflow-x: auto;
+      color: var(--text)
+    }
+
+    .kw {
+      color: #60a5fa
+    }
+
+    .tb {
+      color: var(--cyan)
+    }
+
+    .str {
+      color: #fbbf24
+    }
+
+    .num {
+      color: #c4b5fd
+    }
+
+    .op {
+      color: var(--text3)
+    }
+
+    .cm {
+      color: var(--text3);
+      font-style: italic
+    }
+
+    .ok {
+      color: var(--green)
+    }
+
+    .pr {
+      color: var(--cyan)
+    }
+
+    .err {
+      color: #f87171
+    }
+
+    /* CALLOUTS */
+    .callout {
+      border-radius: 9px;
+      padding: 14px 18px;
+      margin: 14px 0 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: .87rem;
+      line-height: 1.7
+    }
+
+    .callout svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .callout.info {
+      background: var(--cyan-ll);
+      border: 1px solid rgba(0, 229, 255, .14);
+      color: var(--text2)
+    }
+
+    .callout.info svg {
+      color: var(--cyan)
+    }
+
+    .callout.warn {
+      background: rgba(245, 158, 11, .07);
+      border: 1px solid rgba(245, 158, 11, .18);
+      color: var(--text2)
+    }
+
+    .callout.warn svg {
+      color: var(--yellow)
+    }
+
+    .callout.success {
+      background: var(--green-l);
+      border: 1px solid rgba(34, 197, 94, .18);
+      color: var(--text2)
+    }
+
+    .callout.success svg {
+      color: var(--green)
+    }
+
+    .callout.error {
+      background: var(--red-l);
+      border: 1px solid rgba(239, 68, 68, .18);
+      color: var(--text2)
+    }
+
+    .callout.error svg {
+      color: var(--red)
+    }
+
+    /* TABLES */
+    .dt {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      font-size: .84rem
+    }
+
+    .dt th {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text3);
+      text-align: left;
+      padding: 9px 12px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .dt td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+      vertical-align: top;
+      line-height: 1.6
+    }
+
+    .dt tr:last-child td {
+      border-bottom: none
+    }
+
+    .dt tr:hover td {
+      background: rgba(255, 255, 255, .015)
+    }
+
+    .tbadge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--cyan-ll);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 229, 255, .15)
+    }
+
+    /* CMD CARDS */
+    .cmd-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0 20px
+    }
+
+    .cmd-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      transition: border-color .2s
+    }
+
+    .cmd-card:hover {
+      border-color: rgba(0, 229, 255, .2)
+    }
+
+    .cmd-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px
+    }
+
+    .cmd-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--cyan)
+    }
+
+    .cmd-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .6rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: var(--bg3);
+      color: var(--text3);
+      border: 1px solid var(--border);
+      margin-left: auto
+    }
+
+    .cmd-desc {
+      font-size: .84rem;
+      color: var(--text2);
+      line-height: 1.65;
+      margin-bottom: 9px
+    }
+
+    .cmd-usage {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .76rem;
+      color: var(--text);
+      background: var(--bg3);
+      padding: 7px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border)
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      gap: 12px
+    }
+
+    .pg-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text2);
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all .2s;
+      font-size: .85rem;
+      flex: 1
+    }
+
+    .pg-btn:hover {
+      border-color: rgba(0, 229, 255, .3);
+      color: var(--cyan);
+      background: var(--cyan-ll)
+    }
+
+    .pg-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0
+    }
+
+    .pg-btn .pg-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem;
+      color: var(--text3);
+      display: block;
+      margin-bottom: 2px
+    }
+
+    .pg-btn.next {
+      justify-content: flex-end;
+      text-align: right
+    }
+
+    /* ── RIGHT PANEL ── */
+    .docs-right {
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      background: var(--bg2);
+      padding: 0
+    }
+
+    .docs-right::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .docs-right::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px
+    }
+
+    /* ON THIS PAGE */
+    .toc-wrap {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .toc-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--text3);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .toc-label svg {
+      width: 11px;
+      height: 11px
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: .8rem;
+      color: var(--text3);
+      text-decoration: none;
+      transition: all .15s;
+      border-left: 2px solid transparent;
+      margin-bottom: 1px
+    }
+
+    .toc-link svg {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0
+    }
+
+    .toc-link:hover {
+      color: var(--text2);
+      background: rgba(255, 255, 255, .03)
+    }
+
+    .toc-link.active {
+      color: var(--cyan);
+      background: var(--cyan-ll);
+      border-left-color: var(--cyan)
+    }
+
+    .toc-link.active svg {
+      color: var(--cyan)
+    }
+
+    .toc-link.sub {
+      padding-left: 20px;
+      font-size: .76rem
+    }
+
+    /* QUICK REF CARD */
+    .quick-ref {
+      padding: 20px
+    }
+
+    .qr-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--text3);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .qr-label svg {
+      width: 11px;
+      height: 11px
+    }
+
+    .qr-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px
+    }
+
+    .qr-bar {
+      background: #060c12;
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .62rem;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .qr-bar svg {
+      width: 10px;
+      height: 10px
+    }
+
+    .qr-pre {
+      padding: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .72rem;
+      line-height: 1.8;
+      color: var(--text);
+      overflow-x: auto
+    }
+
+    /* STATS STRIP */
+    .stats-strip {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .stat-label-r {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .72rem;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .stat-label-r svg {
+      width: 11px;
+      height: 11px
+    }
+
+    .stat-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--cyan)
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:1200px) {
+      .docs-layout {
+        grid-template-columns: var(--left-w) 1fr
+      }
+
+      .docs-right {
+        display: none
+      }
+
+      .nav-inner {
+        grid-template-columns: var(--left-w) 1fr auto
+      }
+    }
+
+    @media(max-width:768px) {
+      .docs-layout {
+        grid-template-columns: 1fr
+      }
+
+      .docs-sidebar {
+        display: none
+      }
+
+      .docs-content {
+        padding: 32px 24px 60px
+      }
+
+      .nav-inner {
+        grid-template-columns: 1fr auto
+      }
+
+      .nav-logo-area {
+        border-right: none
+      }
+
+      .nav-search {
+        display: none
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-actions .btn-text {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav class="docs-nav">
-  <div class="nav-inner">
-    <div class="nav-logo-area">
-      <a class="logo" href="index.html">
-        <div class="logo-mark"><img src="assets/icon.png" alt="Logo" style="width:35px;height:35px"></div>
-        zerobase<span class="logo-sep">/</span><span class="logo-section">docs</span>
-      </a>
-    </div>
-    <div class="nav-search">
-      <div class="search-box">
-        <i data-lucide="search" style="width:14px;height:14px"></i>
-        <span>Search documentation...</span>
-        <kbd>⌘K</kbd>
+  <!-- NAV -->
+  <nav class="docs-nav">
+    <div class="nav-inner">
+      <div class="nav-logo-area">
+        <a class="logo" href="index.html">
+          <div class="logo-mark"><img src="assets/icon.png" alt="Logo" style="width:35px;height:35px"></div>
+          zerobase<span class="logo-sep">/</span><span class="logo-section">docs</span>
+        </a>
+      </div>
+      <div class="nav-search">
+        <div class="search-box">
+          <i data-lucide="search" style="width:14px;height:14px"></i>
+          <span>Search documentation...</span>
+          <kbd>⌘K</kbd>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-ghost" href="index.html">
+          <i data-lucide="arrow-left"></i>
+          <span class="btn-text">Home</span>
+        </a>
+
+        <a class="btn btn-primary" href="https://npmjs.com/package/zerobase-cli" target="_blank">
+          <i data-lucide="package"></i>
+          <span class="btn-text">npm</span>
+        </a>
       </div>
     </div>
-    <div class="nav-actions">
-      <a class="btn btn-ghost" href="index.html"><i data-lucide="arrow-left"></i> Home</a>
-      <a class="btn btn-primary" href="https://npmjs.com/package/zerobase-cli" target="_blank"><i data-lucide="package"></i> npm</a>
-    </div>
-  </div>
-</nav>
+  </nav>
 
-<div class="docs-layout">
+  <div class="docs-layout">
 
-<!-- ── LEFT SIDEBAR ── -->
-<aside class="docs-sidebar">
-  <div class="sidebar-group">
-    <div class="sidebar-group-label">Getting Started</div>
-    <a class="sidebar-link active" href="#quickstart"><i data-lucide="rocket"></i> Quick Start</a>
-    <a class="sidebar-link" href="#install"><i data-lucide="download"></i> Installation</a>
-    <a class="sidebar-link" href="#init"><i data-lucide="folder-plus"></i> Init &amp; Storage</a>
-  </div>
-  <div class="sidebar-group">
-    <div class="sidebar-group-label">CLI</div>
-    <a class="sidebar-link" href="#cli"><i data-lucide="terminal"></i> All Commands</a>
-    <a class="sidebar-link" href="#shell"><i data-lucide="chevron-right"></i> Query Shell</a>
-    <a class="sidebar-link" href="#history"><i data-lucide="clock"></i> History</a>
-  </div>
-  <div class="sidebar-group">
-    <div class="sidebar-group-label">SQL Reference</div>
-    <a class="sidebar-link" href="#create"><i data-lucide="plus-square"></i> CREATE TABLE</a>
-    <a class="sidebar-link" href="#drop"><i data-lucide="minus-square"></i> DROP TABLE</a>
-    <a class="sidebar-link" href="#insert"><i data-lucide="arrow-down-circle"></i> INSERT INTO</a>
-    <a class="sidebar-link" href="#select"><i data-lucide="search"></i> SELECT</a>
-    <a class="sidebar-link" href="#where"><i data-lucide="filter"></i> WHERE &amp; Logic</a>
-    <a class="sidebar-link" href="#orderby"><i data-lucide="arrow-up-down"></i> ORDER BY / LIMIT</a>
-    <a class="sidebar-link" href="#aggregates"><i data-lucide="bar-chart-2"></i> Aggregates</a>
-    <a class="sidebar-link" href="#update"><i data-lucide="edit-2"></i> UPDATE</a>
-    <a class="sidebar-link" href="#delete"><i data-lucide="trash"></i> DELETE</a>
-  </div>
-  <div class="sidebar-group">
-    <div class="sidebar-group-label">SDK</div>
-    <a class="sidebar-link" href="#sdk"><i data-lucide="code-2"></i> Runtime SDK</a>
-    <a class="sidebar-link" href="#sdk-query"><i data-lucide="zap"></i> db.query()</a>
-    <a class="sidebar-link" href="#sdk-select"><i data-lucide="list"></i> db.select()</a>
-  </div>
-  <div class="sidebar-group">
-    <div class="sidebar-group-label">Reference</div>
-    <a class="sidebar-link" href="#types"><i data-lucide="type"></i> Data Types</a>
-    <a class="sidebar-link" href="#operators"><i data-lucide="sliders"></i> Operators</a>
-    <a class="sidebar-link" href="#storage-format"><i data-lucide="hard-drive"></i> Storage Format</a>
-    <a class="sidebar-link" href="#errors"><i data-lucide="alert-circle"></i> Error Reference</a>
-    <a class="sidebar-link" href="#limits"><i data-lucide="alert-triangle"></i> Limitations</a>
-  </div>
-</aside>
+    <!-- ── LEFT SIDEBAR ── -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Getting Started</div>
+        <a class="sidebar-link active" href="#quickstart"><i data-lucide="rocket"></i> Quick Start</a>
+        <a class="sidebar-link" href="#install"><i data-lucide="download"></i> Installation</a>
+        <a class="sidebar-link" href="#init"><i data-lucide="folder-plus"></i> Init &amp; Storage</a>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">CLI</div>
+        <a class="sidebar-link" href="#cli"><i data-lucide="terminal"></i> All Commands</a>
+        <a class="sidebar-link" href="#shell"><i data-lucide="chevron-right"></i> Query Shell</a>
+        <a class="sidebar-link" href="#history"><i data-lucide="clock"></i> History</a>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">SQL Reference</div>
+        <a class="sidebar-link" href="#create"><i data-lucide="plus-square"></i> CREATE TABLE</a>
+        <a class="sidebar-link" href="#drop"><i data-lucide="minus-square"></i> DROP TABLE</a>
+        <a class="sidebar-link" href="#insert"><i data-lucide="arrow-down-circle"></i> INSERT INTO</a>
+        <a class="sidebar-link" href="#select"><i data-lucide="search"></i> SELECT</a>
+        <a class="sidebar-link" href="#where"><i data-lucide="filter"></i> WHERE &amp; Logic</a>
+        <a class="sidebar-link" href="#orderby"><i data-lucide="arrow-up-down"></i> ORDER BY / LIMIT</a>
+        <a class="sidebar-link" href="#aggregates"><i data-lucide="bar-chart-2"></i> Aggregates</a>
+        <a class="sidebar-link" href="#update"><i data-lucide="edit-2"></i> UPDATE</a>
+        <a class="sidebar-link" href="#delete"><i data-lucide="trash"></i> DELETE</a>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">SDK</div>
+        <a class="sidebar-link" href="#sdk"><i data-lucide="code-2"></i> Runtime SDK</a>
+        <a class="sidebar-link" href="#sdk-query"><i data-lucide="zap"></i> db.query()</a>
+        <a class="sidebar-link" href="#sdk-select"><i data-lucide="list"></i> db.select()</a>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Reference</div>
+        <a class="sidebar-link" href="#types"><i data-lucide="type"></i> Data Types</a>
+        <a class="sidebar-link" href="#operators"><i data-lucide="sliders"></i> Operators</a>
+        <a class="sidebar-link" href="#storage-format"><i data-lucide="hard-drive"></i> Storage Format</a>
+        <a class="sidebar-link" href="#errors"><i data-lucide="alert-circle"></i> Error Reference</a>
+        <a class="sidebar-link" href="#limits"><i data-lucide="alert-triangle"></i> Limitations</a>
+      </div>
+    </aside>
 
-<!-- ── CENTER CONTENT ── -->
-<main class="docs-content">
+    <!-- ── CENTER CONTENT ── -->
+    <main class="docs-content">
 
-  <!-- QUICK START -->
-  <div class="doc-section" id="quickstart">
-    <div class="page-eyebrow"><i data-lucide="rocket"></i> Getting Started</div>
-    <h1 class="page-title">Quick Start</h1>
-    <p class="page-lead">Get Zerobase running in under a minute. No server, no config, no database engine — just SQL over plain JSON files.</p>
+      <!-- QUICK START -->
+      <div class="doc-section" id="quickstart">
+        <div class="page-eyebrow"><i data-lucide="rocket"></i> Getting Started</div>
+        <h1 class="page-title">Quick Start</h1>
+        <p class="page-lead">Get Zerobase running in under a minute. No server, no config, no database engine — just SQL
+          over plain JSON files.</p>
 
-    <div class="callout success"><i data-lucide="check-circle"></i><div>Requires <strong>Node.js 14+</strong>. Zero native dependencies — installs in seconds.</div></div>
+        <div class="callout success"><i data-lucide="check-circle"></i>
+          <div>Requires <strong>Node.js 14+</strong>. Zero native dependencies — installs in seconds.</div>
+        </div>
 
-    <h2 class="sh" id="install"><i data-lucide="download"></i> Installation</h2>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">BASH</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="pr">$</span> npm install zerobase-cli
+        <h2 class="sh" id="install"><i data-lucide="download"></i> Installation</h2>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">BASH</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="pr">$</span> npm install zerobase-cli
 
 <span class="cm"># or globally</span>
 <span class="pr">$</span> npm install -g zerobase-cli</pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="init"><i data-lucide="folder-plus"></i> Initialize</h2>
-    <p class="body">Run inside your project directory. Creates <code class="ic">./storage/</code> with an empty <code class="ic">schema.json</code>. Safe to run multiple times.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">BASH</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="pr">$</span> zerobase init
+        <h2 class="sh" id="init"><i data-lucide="folder-plus"></i> Initialize</h2>
+        <p class="body">Run inside your project directory. Creates <code class="ic">./storage/</code> with an empty
+          <code class="ic">schema.json</code>. Safe to run multiple times.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">BASH</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="pr">$</span> zerobase init
 <span class="ok">✓</span>  Zerobase initialized → ./storage/
 <span class="cm">  › Open the SQL shell:  zerobase query
   › Or use in Node.js:   const db = require('zerobase-cli')</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh"><i data-lucide="terminal"></i> Your first query</h2>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL SHELL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="pr">$</span> zerobase query
+        <h2 class="sh"><i data-lucide="terminal"></i> Your first query</h2>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL SHELL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="pr">$</span> zerobase query
 
 <span class="pr">zerobase›</span> <span class="kw">CREATE TABLE</span> <span class="tb">users</span> <span class="op">(</span>id <span class="kw">INT PRIMARY KEY</span><span class="op">,</span> name <span class="kw">TEXT</span><span class="op">,</span> age <span class="kw">INT</span><span class="op">);</span>
 <span class="ok">✓</span>  Table <strong>users</strong> created  (3 columns, 2ms)
@@ -291,56 +1189,121 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
   │  1 │ Kunal │  20 │
   └────┴───────┴─────┘
 <span class="ok">✓</span>  1 row(s) returned · 1ms</pre>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <hr class="div">
+      <hr class="div">
 
-  <!-- CLI REFERENCE -->
-  <div class="doc-section" id="cli">
-    <div class="page-eyebrow"><i data-lucide="terminal"></i> CLI Reference</div>
-    <h1 class="page-title">CLI Commands</h1>
-    <p class="page-lead">The Zerobase CLI gives you a full set of commands for managing storage and running SQL from any terminal.</p>
+      <!-- CLI REFERENCE -->
+      <div class="doc-section" id="cli">
+        <div class="page-eyebrow"><i data-lucide="terminal"></i> CLI Reference</div>
+        <h1 class="page-title">CLI Commands</h1>
+        <p class="page-lead">The Zerobase CLI gives you a full set of commands for managing storage and running SQL from
+          any terminal.</p>
 
-    <div class="cmd-list">
-      <div class="cmd-card"><div class="cmd-card-top"><span class="cmd-name">zerobase init</span><span class="cmd-tag">SETUP</span></div><p class="cmd-desc">Initialize storage in the current directory. Creates <code class="ic">./storage/</code> and <code class="ic">schema.json</code>.</p><div class="cmd-usage">$ zerobase init</div></div>
-      <div class="cmd-card"><div class="cmd-card-top"><span class="cmd-name">zerobase query</span><span class="cmd-tag">SHELL</span></div><p class="cmd-desc">Open the interactive SQL shell with <code class="ic">↑↓</code> history, multi-line buffering, and dot-commands.</p><div class="cmd-usage">$ zerobase query</div></div>
-      <div class="cmd-card"><div class="cmd-card-top"><span class="cmd-name">zerobase tables</span><span class="cmd-tag">INFO</span></div><p class="cmd-desc">List all tables with column count and primary key info.</p><div class="cmd-usage">$ zerobase tables</div></div>
-      <div class="cmd-card"><div class="cmd-card-top"><span class="cmd-name">zerobase describe &lt;table&gt;</span><span class="cmd-tag">INFO</span></div><p class="cmd-desc">Show column names, types, constraints, and the current row count for a table.</p><div class="cmd-usage">$ zerobase describe users</div></div>
-      <div class="cmd-card"><div class="cmd-card-top"><span class="cmd-name">zerobase drop &lt;table&gt;</span><span class="cmd-tag">DESTRUCTIVE</span></div><p class="cmd-desc">Drop a table and permanently delete its JSON file. Equivalent to <code class="ic">DROP TABLE</code> in SQL.</p><div class="cmd-usage">$ zerobase drop users</div></div>
-    </div>
+        <div class="cmd-list">
+          <div class="cmd-card">
+            <div class="cmd-card-top"><span class="cmd-name">zerobase init</span><span class="cmd-tag">SETUP</span>
+            </div>
+            <p class="cmd-desc">Initialize storage in the current directory. Creates <code class="ic">./storage/</code>
+              and <code class="ic">schema.json</code>.</p>
+            <div class="cmd-usage">$ zerobase init</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-card-top"><span class="cmd-name">zerobase query</span><span class="cmd-tag">SHELL</span>
+            </div>
+            <p class="cmd-desc">Open the interactive SQL shell with <code class="ic">↑↓</code> history, multi-line
+              buffering, and dot-commands.</p>
+            <div class="cmd-usage">$ zerobase query</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-card-top"><span class="cmd-name">zerobase tables</span><span class="cmd-tag">INFO</span>
+            </div>
+            <p class="cmd-desc">List all tables with column count and primary key info.</p>
+            <div class="cmd-usage">$ zerobase tables</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-card-top"><span class="cmd-name">zerobase describe &lt;table&gt;</span><span
+                class="cmd-tag">INFO</span></div>
+            <p class="cmd-desc">Show column names, types, constraints, and the current row count for a table.</p>
+            <div class="cmd-usage">$ zerobase describe users</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-card-top"><span class="cmd-name">zerobase drop &lt;table&gt;</span><span
+                class="cmd-tag">DESTRUCTIVE</span></div>
+            <p class="cmd-desc">Drop a table and permanently delete its JSON file. Equivalent to <code
+                class="ic">DROP TABLE</code> in SQL.</p>
+            <div class="cmd-usage">$ zerobase drop users</div>
+          </div>
+        </div>
 
-    <h2 class="sh" id="shell"><i data-lucide="chevron-right"></i> Shell meta-commands</h2>
-    <p class="body">Inside the <code class="ic">zerobase query</code> shell, these commands work without SQL syntax:</p>
-    <table class="dt">
-      <thead><tr><th>Command</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td><code class="ic">.tables</code></td><td>List all tables</td></tr>
-        <tr><td><code class="ic">.describe &lt;table&gt;</code></td><td>Show schema and row count</td></tr>
-        <tr><td><code class="ic">.drop &lt;table&gt;</code></td><td>Drop a table</td></tr>
-        <tr><td><code class="ic">.history</code></td><td>Show last 20 queries from history file</td></tr>
-        <tr><td><code class="ic">.help</code></td><td>Show all available commands</td></tr>
-        <tr><td><code class="ic">.exit</code></td><td>Exit the shell (also: <code class="ic">exit</code>, <code class="ic">quit</code>)</td></tr>
-      </tbody>
-    </table>
+        <h2 class="sh" id="shell"><i data-lucide="chevron-right"></i> Shell meta-commands</h2>
+        <p class="body">Inside the <code class="ic">zerobase query</code> shell, these commands work without SQL syntax:
+        </p>
+        <table class="dt">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="ic">.tables</code></td>
+              <td>List all tables</td>
+            </tr>
+            <tr>
+              <td><code class="ic">.describe &lt;table&gt;</code></td>
+              <td>Show schema and row count</td>
+            </tr>
+            <tr>
+              <td><code class="ic">.drop &lt;table&gt;</code></td>
+              <td>Drop a table</td>
+            </tr>
+            <tr>
+              <td><code class="ic">.history</code></td>
+              <td>Show last 20 queries from history file</td>
+            </tr>
+            <tr>
+              <td><code class="ic">.help</code></td>
+              <td>Show all available commands</td>
+            </tr>
+            <tr>
+              <td><code class="ic">.exit</code></td>
+              <td>Exit the shell (also: <code class="ic">exit</code>, <code class="ic">quit</code>)</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <h2 class="sh" id="history"><i data-lucide="clock"></i> Query History</h2>
-    <p class="body">The shell persists your query history to <code class="ic">~/.zerobase_history</code> (up to 100 entries). Use <code class="ic">↑</code> and <code class="ic">↓</code> arrow keys to navigate. Run <code class="ic">.history</code> to see recent entries inline.</p>
-  </div>
+        <h2 class="sh" id="history"><i data-lucide="clock"></i> Query History</h2>
+        <p class="body">The shell persists your query history to <code class="ic">~/.zerobase_history</code> (up to 100
+          entries). Use <code class="ic">↑</code> and <code class="ic">↓</code> arrow keys to navigate. Run <code
+            class="ic">.history</code> to see recent entries inline.</p>
+      </div>
 
-  <hr class="div">
+      <hr class="div">
 
-  <!-- SQL REFERENCE -->
-  <div class="doc-section" id="create">
-    <div class="page-eyebrow"><i data-lucide="code-2"></i> SQL Reference</div>
-    <h1 class="page-title">SQL Reference</h1>
-    <p class="page-lead">A precise, complete subset of SQL. Every statement is parsed by a regex-based engine — lightweight, fast, and fully auditable.</p>
+      <!-- SQL REFERENCE -->
+      <div class="doc-section" id="create">
+        <div class="page-eyebrow"><i data-lucide="code-2"></i> SQL Reference</div>
+        <h1 class="page-title">SQL Reference</h1>
+        <p class="page-lead">A precise, complete subset of SQL. Every statement is parsed by a regex-based engine —
+          lightweight, fast, and fully auditable.</p>
 
-    <h2 class="sh"><i data-lucide="plus-square"></i> CREATE TABLE</h2>
-    <p class="body">Define a new table with typed columns. Declare one column as <code class="ic">PRIMARY KEY</code> and Zerobase will auto-increment it on every insert.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">CREATE TABLE</span> <span class="tb">tableName</span> <span class="op">(</span>
+        <h2 class="sh"><i data-lucide="plus-square"></i> CREATE TABLE</h2>
+        <p class="body">Define a new table with typed columns. Declare one column as <code class="ic">PRIMARY KEY</code>
+          and Zerobase will auto-increment it on every insert.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">CREATE TABLE</span> <span class="tb">tableName</span> <span class="op">(</span>
   colName  <span class="kw">TYPE</span> <span class="op">[</span><span class="kw">PRIMARY KEY</span><span class="op">]</span><span class="op">,</span>
   colName  <span class="kw">TYPE</span>
 <span class="op">);</span>
@@ -352,22 +1315,44 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
   price  <span class="kw">FLOAT</span><span class="op">,</span>
   active <span class="kw">BOOL</span>
 <span class="op">);</span></pre>
-    </div>
-    <div class="callout info"><i data-lucide="info"></i><div>Creates <code class="ic">./storage/products.json</code> (empty array) and registers the schema in <code class="ic">schema.json</code>.</div></div>
+        </div>
+        <div class="callout info"><i data-lucide="info"></i>
+          <div>Creates <code class="ic">./storage/products.json</code> (empty array) and registers the schema in <code
+              class="ic">schema.json</code>.</div>
+        </div>
 
-    <h2 class="sh" id="drop"><i data-lucide="minus-square"></i> DROP TABLE</h2>
-    <p class="body">Permanently removes the table's schema entry and deletes its JSON data file.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">DROP TABLE</span> <span class="tb">products</span><span class="op">;</span></pre>
-    </div>
-    <div class="callout warn"><i data-lucide="alert-triangle"></i><div>Irreversible. The JSON file is deleted from disk immediately.</div></div>
+        <h2 class="sh" id="drop"><i data-lucide="minus-square"></i> DROP TABLE</h2>
+        <p class="body">Permanently removes the table's schema entry and deletes its JSON data file.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">DROP TABLE</span> <span class="tb">products</span><span class="op">;</span></pre>
+        </div>
+        <div class="callout warn"><i data-lucide="alert-triangle"></i>
+          <div>Irreversible. The JSON file is deleted from disk immediately.</div>
+        </div>
 
-    <h2 class="sh" id="insert"><i data-lucide="arrow-down-circle"></i> INSERT INTO</h2>
-    <p class="body">Insert a row. Values are matched positionally to columns. String values must be single-quoted. Omit the primary key column — Zerobase assigns the next integer automatically.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">INSERT INTO</span> <span class="tb">tableName</span> <span class="op">(</span>col1<span class="op">,</span> col2<span class="op">)</span> <span class="kw">VALUES</span> <span class="op">(</span>val1<span class="op">,</span> val2<span class="op">);</span>
+        <h2 class="sh" id="insert"><i data-lucide="arrow-down-circle"></i> INSERT INTO</h2>
+        <p class="body">Insert a row. Values are matched positionally to columns. String values must be single-quoted.
+          Omit the primary key column — Zerobase assigns the next integer automatically.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">INSERT INTO</span> <span class="tb">tableName</span> <span class="op">(</span>col1<span class="op">,</span> col2<span class="op">)</span> <span class="kw">VALUES</span> <span class="op">(</span>val1<span class="op">,</span> val2<span class="op">);</span>
 
 <span class="cm">-- Strings must be single-quoted</span>
 <span class="kw">INSERT INTO</span> <span class="tb">users</span> <span class="op">(</span>name<span class="op">,</span> age<span class="op">)</span> <span class="kw">VALUES</span> <span class="op">(</span><span class="str">'Kunal'</span><span class="op">,</span> <span class="num">20</span><span class="op">);</span>
@@ -375,13 +1360,22 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
 
 <span class="cm">-- Multiple types</span>
 <span class="kw">INSERT INTO</span> <span class="tb">products</span> <span class="op">(</span>name<span class="op">,</span> price<span class="op">,</span> active<span class="op">)</span> <span class="kw">VALUES</span> <span class="op">(</span><span class="str">'Widget'</span><span class="op">,</span> <span class="num">9.99</span><span class="op">,</span> <span class="num">1</span><span class="op">);</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="select"><i data-lucide="search"></i> SELECT</h2>
-    <p class="body">Query rows from a table. Supports column projection, WHERE conditions, ORDER BY, LIMIT, and aggregate functions.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="cm">-- All columns</span>
+        <h2 class="sh" id="select"><i data-lucide="search"></i> SELECT</h2>
+        <p class="body">Query rows from a table. Supports column projection, WHERE conditions, ORDER BY, LIMIT, and
+          aggregate functions.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="cm">-- All columns</span>
 <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">users</span><span class="op">;</span>
 
 <span class="cm">-- Specific columns</span>
@@ -389,13 +1383,22 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
 
 <span class="cm">-- Column alias</span>
 <span class="kw">SELECT</span> name <span class="kw">AS</span> full_name <span class="kw">FROM</span> <span class="tb">users</span><span class="op">;</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="where"><i data-lucide="filter"></i> WHERE &amp; Logic</h2>
-    <p class="body">Filter rows with one or more conditions. Chain with <code class="ic">AND</code> or <code class="ic">OR</code>.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="cm">-- Single condition</span>
+        <h2 class="sh" id="where"><i data-lucide="filter"></i> WHERE &amp; Logic</h2>
+        <p class="body">Filter rows with one or more conditions. Chain with <code class="ic">AND</code> or <code
+            class="ic">OR</code>.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="cm">-- Single condition</span>
 <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">users</span> <span class="kw">WHERE</span> age <span class="op">&gt;</span> <span class="num">18</span><span class="op">;</span>
 
 <span class="cm">-- AND</span>
@@ -405,12 +1408,20 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
 <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">users</span> <span class="kw">WHERE</span> age <span class="op">&lt;</span> <span class="num">18</span> <span class="kw">OR</span> age <span class="op">&gt;</span> <span class="num">65</span><span class="op">;</span>
 
 <span class="cm">-- Supported operators: =  !=  &gt;  &lt;  &gt;=  &lt;=</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="orderby"><i data-lucide="arrow-up-down"></i> ORDER BY &amp; LIMIT</h2>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">products</span> <span class="kw">ORDER BY</span> price <span class="kw">DESC</span><span class="op">;</span>
+        <h2 class="sh" id="orderby"><i data-lucide="arrow-up-down"></i> ORDER BY &amp; LIMIT</h2>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">products</span> <span class="kw">ORDER BY</span> price <span class="kw">DESC</span><span class="op">;</span>
 <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">users</span> <span class="kw">ORDER BY</span> name <span class="kw">ASC</span> <span class="kw">LIMIT</span> <span class="num">10</span><span class="op">;</span>
 
 <span class="cm">-- Combined with WHERE</span>
@@ -418,13 +1429,22 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
   <span class="kw">WHERE</span> active <span class="op">=</span> <span class="num">1</span>
   <span class="kw">ORDER BY</span> price <span class="kw">DESC</span>
   <span class="kw">LIMIT</span> <span class="num">5</span><span class="op">;</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="aggregates"><i data-lucide="bar-chart-2"></i> Aggregates</h2>
-    <p class="body">Compute statistics across filtered rows. Combine multiple aggregates in one SELECT. Use <code class="ic">AS</code> for readable column names in results.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">SELECT</span> <span class="kw">COUNT</span><span class="op">(*)</span> <span class="kw">FROM</span> <span class="tb">users</span><span class="op">;</span>
+        <h2 class="sh" id="aggregates"><i data-lucide="bar-chart-2"></i> Aggregates</h2>
+        <p class="body">Compute statistics across filtered rows. Combine multiple aggregates in one SELECT. Use <code
+            class="ic">AS</code> for readable column names in results.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">SELECT</span> <span class="kw">COUNT</span><span class="op">(*)</span> <span class="kw">FROM</span> <span class="tb">users</span><span class="op">;</span>
 <span class="kw">SELECT</span> <span class="kw">SUM</span><span class="op">(</span>price<span class="op">)</span> <span class="kw">FROM</span> <span class="tb">products</span><span class="op">;</span>
 <span class="kw">SELECT</span> <span class="kw">MIN</span><span class="op">(</span>age<span class="op">),</span> <span class="kw">MAX</span><span class="op">(</span>age<span class="op">),</span> <span class="kw">AVG</span><span class="op">(</span>age<span class="op">)</span> <span class="kw">FROM</span> <span class="tb">users</span><span class="op">;</span>
 
@@ -435,43 +1455,73 @@ code.ic{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--cyan);b
   <span class="kw">MAX</span><span class="op">(</span>price<span class="op">)</span> <span class="kw">AS</span> highest
 <span class="kw">FROM</span> <span class="tb">products</span>
 <span class="kw">WHERE</span> active <span class="op">=</span> <span class="num">1</span><span class="op">;</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="update"><i data-lucide="edit-2"></i> UPDATE</h2>
-    <p class="body">Update columns on matching rows. WHERE is required — Zerobase rejects UPDATE without a condition to prevent accidental full-table overwrites.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">UPDATE</span> <span class="tb">users</span> <span class="kw">SET</span> age <span class="op">=</span> <span class="num">25</span> <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span class="op">;</span>
+        <h2 class="sh" id="update"><i data-lucide="edit-2"></i> UPDATE</h2>
+        <p class="body">Update columns on matching rows. WHERE is required — Zerobase rejects UPDATE without a condition
+          to prevent accidental full-table overwrites.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">UPDATE</span> <span class="tb">users</span> <span class="kw">SET</span> age <span class="op">=</span> <span class="num">25</span> <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span class="op">;</span>
 
 <span class="cm">-- Multiple columns</span>
 <span class="kw">UPDATE</span> <span class="tb">users</span> <span class="kw">SET</span> age <span class="op">=</span> <span class="num">25</span><span class="op">,</span> name <span class="op">=</span> <span class="str">'Kunal V'</span> <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span class="op">;</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="delete"><i data-lucide="trash"></i> DELETE</h2>
-    <p class="body">Remove matching rows. Without WHERE, all rows are deleted (the table and its schema remain).</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">SQL</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">DELETE FROM</span> <span class="tb">users</span> <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">3</span><span class="op">;</span>
+        <h2 class="sh" id="delete"><i data-lucide="trash"></i> DELETE</h2>
+        <p class="body">Remove matching rows. Without WHERE, all rows are deleted (the table and its schema remain).</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">SQL</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">DELETE FROM</span> <span class="tb">users</span> <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">3</span><span class="op">;</span>
 <span class="cm">-- Clear all rows (table stays)</span>
 <span class="kw">DELETE FROM</span> <span class="tb">users</span><span class="op">;</span></pre>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <hr class="div">
+      <hr class="div">
 
-  <!-- SDK -->
-  <div class="doc-section" id="sdk">
-    <div class="page-eyebrow"><i data-lucide="package"></i> Runtime SDK</div>
-    <h1 class="page-title">Node.js SDK</h1>
-    <p class="page-lead">Use Zerobase directly in your app with <code class="ic">require('zerobase-cli')</code>. The SDK runs the same SQL engine as the CLI — same storage, same results.</p>
+      <!-- SDK -->
+      <div class="doc-section" id="sdk">
+        <div class="page-eyebrow"><i data-lucide="package"></i> Runtime SDK</div>
+        <h1 class="page-title">Node.js SDK</h1>
+        <p class="page-lead">Use Zerobase directly in your app with <code class="ic">require('zerobase-cli')</code>. The
+          SDK runs the same SQL engine as the CLI — same storage, same results.</p>
 
-    <div class="callout info"><i data-lucide="info"></i><div>Make sure <code class="ic">zerobase init</code> has been run in your project root before using the SDK. The SDK reads from <code class="ic">./storage/</code> relative to wherever Node.js is invoked.</div></div>
+        <div class="callout info"><i data-lucide="info"></i>
+          <div>Make sure <code class="ic">zerobase init</code> has been run in your project root before using the SDK.
+            The SDK reads from <code class="ic">./storage/</code> relative to wherever Node.js is invoked.</div>
+        </div>
 
-    <h2 class="sh" id="sdk-query"><i data-lucide="zap"></i> db.query(sql)</h2>
-    <p class="body">Runs any SQL statement and returns a Promise resolving to a result object. The shape of the result depends on the query type.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">JS</span><span class="cb-file">app.js</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="kw">const</span> db <span class="op">=</span> require(<span class="str">'zerobase-cli'</span>);
+        <h2 class="sh" id="sdk-query"><i data-lucide="zap"></i> db.query(sql)</h2>
+        <p class="body">Runs any SQL statement and returns a Promise resolving to a result object. The shape of the
+          result depends on the query type.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">JS</span><span class="cb-file">app.js</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="kw">const</span> db <span class="op">=</span> require(<span class="str">'zerobase-cli'</span>);
 
 <span class="cm">// INSERT → { message, inserted, primaryKey }</span>
 <span class="kw">const</span> r1 <span class="op">=</span> <span class="kw">await</span> db.query(<span class="str">"INSERT INTO users (name, age) VALUES ('Priya', 22)"</span>);
@@ -489,61 +1539,140 @@ console.log(r3.updatedCount); <span class="cm">// 1</span>
 <span class="cm">// DELETE → { message, deletedCount }</span>
 <span class="kw">const</span> r4 <span class="op">=</span> <span class="kw">await</span> db.query(<span class="str">"DELETE FROM users WHERE id = 3"</span>);
 console.log(r4.deletedCount); <span class="cm">// 1</span></pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="sdk-select"><i data-lucide="list"></i> db.select(sql)</h2>
-    <p class="body">Shorthand for SELECT queries — returns the rows array directly instead of a result wrapper object.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">JS</span></div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button></div>
-      <pre><span class="cm">// Returns Array directly (not { rows, count })</span>
+        <h2 class="sh" id="sdk-select"><i data-lucide="list"></i> db.select(sql)</h2>
+        <p class="body">Shorthand for SELECT queries — returns the rows array directly instead of a result wrapper
+          object.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">JS</span>
+            </div><button class="cb-copy" onclick="copyCode(this)"><i data-lucide="copy"></i> copy</button>
+          </div>
+          <pre><span class="cm">// Returns Array directly (not { rows, count })</span>
 <span class="kw">const</span> rows <span class="op">=</span> <span class="kw">await</span> db.select(<span class="str">"SELECT * FROM users ORDER BY age DESC LIMIT 5"</span>);
 console.log(rows[<span class="num">0</span>].name); <span class="cm">// 'Priya'</span></pre>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <hr class="div">
+      <hr class="div">
 
-  <!-- REFERENCE -->
-  <div class="doc-section" id="types">
-    <div class="page-eyebrow"><i data-lucide="book-open"></i> Reference</div>
-    <h1 class="page-title">Reference</h1>
+      <!-- REFERENCE -->
+      <div class="doc-section" id="types">
+        <div class="page-eyebrow"><i data-lucide="book-open"></i> Reference</div>
+        <h1 class="page-title">Reference</h1>
 
-    <h2 class="sh"><i data-lucide="type"></i> Data Types</h2>
-    <table class="dt">
-      <thead><tr><th>SQL Type</th><th>JS Type</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td><span class="tbadge">INT</span></td><td><code class="ic">number</code></td><td>Integers. Good for IDs, ages, counts.</td></tr>
-        <tr><td><span class="tbadge">FLOAT</span></td><td><code class="ic">number</code></td><td>Decimal values. Good for prices, ratios.</td></tr>
-        <tr><td><span class="tbadge">TEXT</span></td><td><code class="ic">string</code></td><td>Any string. Must be single-quoted in SQL.</td></tr>
-        <tr><td><span class="tbadge">BOOL</span></td><td><code class="ic">boolean</code></td><td>Use <code class="ic">1</code> / <code class="ic">0</code> in SQL. Stored as true/false in JSON.</td></tr>
-      </tbody>
-    </table>
+        <h2 class="sh"><i data-lucide="type"></i> Data Types</h2>
+        <table class="dt">
+          <thead>
+            <tr>
+              <th>SQL Type</th>
+              <th>JS Type</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tbadge">INT</span></td>
+              <td><code class="ic">number</code></td>
+              <td>Integers. Good for IDs, ages, counts.</td>
+            </tr>
+            <tr>
+              <td><span class="tbadge">FLOAT</span></td>
+              <td><code class="ic">number</code></td>
+              <td>Decimal values. Good for prices, ratios.</td>
+            </tr>
+            <tr>
+              <td><span class="tbadge">TEXT</span></td>
+              <td><code class="ic">string</code></td>
+              <td>Any string. Must be single-quoted in SQL.</td>
+            </tr>
+            <tr>
+              <td><span class="tbadge">BOOL</span></td>
+              <td><code class="ic">boolean</code></td>
+              <td>Use <code class="ic">1</code> / <code class="ic">0</code> in SQL. Stored as true/false in JSON.</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <h2 class="sh" id="operators"><i data-lucide="sliders"></i> WHERE Operators</h2>
-    <table class="dt">
-      <thead><tr><th>Op</th><th>Meaning</th><th>Works with</th></tr></thead>
-      <tbody>
-        <tr><td><code class="ic">=</code></td><td>Equal to</td><td>INT, FLOAT, TEXT, BOOL</td></tr>
-        <tr><td><code class="ic">!=</code></td><td>Not equal to</td><td>INT, FLOAT, TEXT, BOOL</td></tr>
-        <tr><td><code class="ic">&gt;</code></td><td>Greater than</td><td>INT, FLOAT</td></tr>
-        <tr><td><code class="ic">&lt;</code></td><td>Less than</td><td>INT, FLOAT</td></tr>
-        <tr><td><code class="ic">&gt;=</code></td><td>Greater than or equal</td><td>INT, FLOAT</td></tr>
-        <tr><td><code class="ic">&lt;=</code></td><td>Less than or equal</td><td>INT, FLOAT</td></tr>
-      </tbody>
-    </table>
+        <h2 class="sh" id="operators"><i data-lucide="sliders"></i> WHERE Operators</h2>
+        <table class="dt">
+          <thead>
+            <tr>
+              <th>Op</th>
+              <th>Meaning</th>
+              <th>Works with</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="ic">=</code></td>
+              <td>Equal to</td>
+              <td>INT, FLOAT, TEXT, BOOL</td>
+            </tr>
+            <tr>
+              <td><code class="ic">!=</code></td>
+              <td>Not equal to</td>
+              <td>INT, FLOAT, TEXT, BOOL</td>
+            </tr>
+            <tr>
+              <td><code class="ic">&gt;</code></td>
+              <td>Greater than</td>
+              <td>INT, FLOAT</td>
+            </tr>
+            <tr>
+              <td><code class="ic">&lt;</code></td>
+              <td>Less than</td>
+              <td>INT, FLOAT</td>
+            </tr>
+            <tr>
+              <td><code class="ic">&gt;=</code></td>
+              <td>Greater than or equal</td>
+              <td>INT, FLOAT</td>
+            </tr>
+            <tr>
+              <td><code class="ic">&lt;=</code></td>
+              <td>Less than or equal</td>
+              <td>INT, FLOAT</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <h2 class="sh" id="storage-format"><i data-lucide="hard-drive"></i> Storage Format</h2>
-    <p class="body">All data lives in <code class="ic">./storage/</code> relative to your project root. Zerobase finds this folder by walking up from the current directory — so <code class="ic">zerobase query</code> works from any subdirectory, like <code class="ic">src/routes/</code> or <code class="ic">tests/</code>.</p>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">STRUCTURE</span></div></div>
-      <pre>./storage/
+        <h2 class="sh" id="storage-format"><i data-lucide="hard-drive"></i> Storage Format</h2>
+        <p class="body">All data lives in <code class="ic">./storage/</code> relative to your project root. Zerobase
+          finds this folder by walking up from the current directory — so <code class="ic">zerobase query</code> works
+          from any subdirectory, like <code class="ic">src/routes/</code> or <code class="ic">tests/</code>.</p>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">STRUCTURE</span>
+            </div>
+          </div>
+          <pre>./storage/
   schema.json      <span class="cm">← table definitions + column types</span>
   users.json       <span class="cm">← row data for "users"</span>
   products.json    <span class="cm">← row data for "products"</span></pre>
-    </div>
-    <div class="cb">
-      <div class="cb-bar"><div class="cb-left"><div class="cb-dots"><div class="cd r"></div><div class="cd y"></div><div class="cd g"></div></div><span class="cb-lang">JSON</span><span class="cb-file">schema.json</span></div></div>
-      <pre>{
+        </div>
+        <div class="cb">
+          <div class="cb-bar">
+            <div class="cb-left">
+              <div class="cb-dots">
+                <div class="cd r"></div>
+                <div class="cd y"></div>
+                <div class="cd g"></div>
+              </div><span class="cb-lang">JSON</span><span class="cb-file">schema.json</span>
+            </div>
+          </div>
+          <pre>{
   <span class="str">"users"</span>: {
     <span class="str">"columns"</span>: {
       <span class="str">"id"</span>:   <span class="str">"number"</span><span class="op">,</span>
@@ -553,152 +1682,206 @@ console.log(rows[<span class="num">0</span>].name); <span class="cm">// 'Priya'<
     <span class="str">"primaryKey"</span>: <span class="str">"id"</span>
   }
 }</pre>
-    </div>
+        </div>
 
-    <h2 class="sh" id="errors"><i data-lucide="alert-circle"></i> Error Reference</h2>
-    <p class="body">Every error includes the problem, expected format, and a working example.</p>
-    <div class="callout error"><i data-lucide="x-circle"></i><div><strong>Unknown command: "DROP".</strong><br><span style="color:var(--text3)">Hint: Did you mean: DROP TABLE tableName;</span></div></div>
-    <div class="callout error"><i data-lucide="x-circle"></i><div><strong>Column "email" does not exist in table "users".</strong><br><span style="color:var(--text3)">Available columns: id, name, age</span></div></div>
-    <div class="callout error"><i data-lucide="x-circle"></i><div><strong>Type mismatch on "age": expected number, got string.</strong><br><span style="color:var(--text3)">Hint: Numbers should not be quoted — use 20, not '20'.</span></div></div>
-    <div class="callout error"><i data-lucide="x-circle"></i><div><strong>UPDATE requires a WHERE clause.</strong><br><span style="color:var(--text3)">Example: UPDATE users SET age = 25 WHERE id = 1;</span></div></div>
-    <div class="callout error"><i data-lucide="x-circle"></i><div><strong>Column/value count mismatch: 3 column(s) but 2 value(s).</strong></div></div>
+        <h2 class="sh" id="errors"><i data-lucide="alert-circle"></i> Error Reference</h2>
+        <p class="body">Every error includes the problem, expected format, and a working example.</p>
+        <div class="callout error"><i data-lucide="x-circle"></i>
+          <div><strong>Unknown command: "DROP".</strong><br><span style="color:var(--text3)">Hint: Did you mean: DROP
+              TABLE tableName;</span></div>
+        </div>
+        <div class="callout error"><i data-lucide="x-circle"></i>
+          <div><strong>Column "email" does not exist in table "users".</strong><br><span
+              style="color:var(--text3)">Available columns: id, name, age</span></div>
+        </div>
+        <div class="callout error"><i data-lucide="x-circle"></i>
+          <div><strong>Type mismatch on "age": expected number, got string.</strong><br><span
+              style="color:var(--text3)">Hint: Numbers should not be quoted — use 20, not '20'.</span></div>
+        </div>
+        <div class="callout error"><i data-lucide="x-circle"></i>
+          <div><strong>UPDATE requires a WHERE clause.</strong><br><span style="color:var(--text3)">Example: UPDATE
+              users SET age = 25 WHERE id = 1;</span></div>
+        </div>
+        <div class="callout error"><i data-lucide="x-circle"></i>
+          <div><strong>Column/value count mismatch: 3 column(s) but 2 value(s).</strong></div>
+        </div>
 
-    <h2 class="sh" id="limits"><i data-lucide="alert-triangle"></i> Limitations</h2>
-    <div class="callout warn"><i data-lucide="alert-triangle"></i><div>Zerobase is designed for local development, prototyping, and offline tools — not production workloads with concurrent writes.</div></div>
-    <ul class="blist">
-      <li>No JOIN — queries are single-table only</li>
-      <li>No concurrent write safety — one process at a time</li>
-      <li>No transactions or rollbacks</li>
-      <li>No nested WHERE groups — AND/OR chains only</li>
-      <li>No subqueries or nested SELECT</li>
-      <li>No GROUP BY — use WHERE to pre-filter then aggregate</li>
-      <li>No indexes — queries scan the full JSON array linearly</li>
-      <li>Practical limit ~10,000 rows per table before performance degrades</li>
-    </ul>
+        <h2 class="sh" id="limits"><i data-lucide="alert-triangle"></i> Limitations</h2>
+        <div class="callout warn"><i data-lucide="alert-triangle"></i>
+          <div>Zerobase is designed for local development, prototyping, and offline tools — not production workloads
+            with concurrent writes.</div>
+        </div>
+        <ul class="blist">
+          <li>No JOIN — queries are single-table only</li>
+          <li>No concurrent write safety — one process at a time</li>
+          <li>No transactions or rollbacks</li>
+          <li>No nested WHERE groups — AND/OR chains only</li>
+          <li>No subqueries or nested SELECT</li>
+          <li>No GROUP BY — use WHERE to pre-filter then aggregate</li>
+          <li>No indexes — queries scan the full JSON array linearly</li>
+          <li>Practical limit ~10,000 rows per table before performance degrades</li>
+        </ul>
 
-    <div class="pagination">
-      <a class="pg-btn" href="index.html"><i data-lucide="arrow-left"></i><div><span class="pg-label">Back to</span> Home</div></a>
-      <a class="pg-btn next" href="#quickstart"><div><span class="pg-label">Jump to top</span> Quick Start</div><i data-lucide="arrow-up"></i></a>
-    </div>
-  </div>
+        <div class="pagination">
+          <a class="pg-btn" href="index.html"><i data-lucide="arrow-left"></i>
+            <div><span class="pg-label">Back to</span> Home</div>
+          </a>
+          <a class="pg-btn next" href="#quickstart">
+            <div><span class="pg-label">Jump to top</span> Quick Start</div><i data-lucide="arrow-up"></i>
+          </a>
+        </div>
+      </div>
 
-</main>
+    </main>
 
-<!-- ── RIGHT PANEL ── -->
-<aside class="docs-right">
-  <!-- ON THIS PAGE TOC -->
-  <div class="toc-wrap">
-    <div class="toc-label"><i data-lucide="list" style="width:11px;height:11px"></i> On this page</div>
-    <a class="toc-link" href="#quickstart"><i data-lucide="rocket" style="width:11px;height:11px"></i> Quick Start</a>
-    <a class="toc-link sub" href="#install"><i data-lucide="download" style="width:11px;height:11px"></i> Installation</a>
-    <a class="toc-link sub" href="#init"><i data-lucide="folder-plus" style="width:11px;height:11px"></i> Initialize</a>
-    <a class="toc-link" href="#cli"><i data-lucide="terminal" style="width:11px;height:11px"></i> CLI Commands</a>
-    <a class="toc-link sub" href="#shell"><i data-lucide="chevron-right" style="width:11px;height:11px"></i> Query Shell</a>
-    <a class="toc-link" href="#create"><i data-lucide="plus-square" style="width:11px;height:11px"></i> CREATE TABLE</a>
-    <a class="toc-link" href="#insert"><i data-lucide="arrow-down-circle" style="width:11px;height:11px"></i> INSERT INTO</a>
-    <a class="toc-link" href="#select"><i data-lucide="search" style="width:11px;height:11px"></i> SELECT</a>
-    <a class="toc-link sub" href="#where"><i data-lucide="filter" style="width:11px;height:11px"></i> WHERE &amp; Logic</a>
-    <a class="toc-link sub" href="#orderby"><i data-lucide="arrow-up-down" style="width:11px;height:11px"></i> ORDER BY / LIMIT</a>
-    <a class="toc-link sub" href="#aggregates"><i data-lucide="bar-chart-2" style="width:11px;height:11px"></i> Aggregates</a>
-    <a class="toc-link" href="#update"><i data-lucide="edit-2" style="width:11px;height:11px"></i> UPDATE</a>
-    <a class="toc-link" href="#delete"><i data-lucide="trash" style="width:11px;height:11px"></i> DELETE</a>
-    <a class="toc-link" href="#sdk"><i data-lucide="code-2" style="width:11px;height:11px"></i> Node.js SDK</a>
-    <a class="toc-link" href="#types"><i data-lucide="type" style="width:11px;height:11px"></i> Data Types</a>
-    <a class="toc-link sub" href="#operators"><i data-lucide="sliders" style="width:11px;height:11px"></i> Operators</a>
-    <a class="toc-link sub" href="#storage-format"><i data-lucide="hard-drive" style="width:11px;height:11px"></i> Storage Format</a>
-    <a class="toc-link sub" href="#errors"><i data-lucide="alert-circle" style="width:11px;height:11px"></i> Errors</a>
-    <a class="toc-link sub" href="#limits"><i data-lucide="alert-triangle" style="width:11px;height:11px"></i> Limitations</a>
-  </div>
+    <!-- ── RIGHT PANEL ── -->
+    <aside class="docs-right">
+      <!-- ON THIS PAGE TOC -->
+      <div class="toc-wrap">
+        <div class="toc-label"><i data-lucide="list" style="width:11px;height:11px"></i> On this page</div>
+        <a class="toc-link" href="#quickstart"><i data-lucide="rocket" style="width:11px;height:11px"></i> Quick
+          Start</a>
+        <a class="toc-link sub" href="#install"><i data-lucide="download" style="width:11px;height:11px"></i>
+          Installation</a>
+        <a class="toc-link sub" href="#init"><i data-lucide="folder-plus" style="width:11px;height:11px"></i>
+          Initialize</a>
+        <a class="toc-link" href="#cli"><i data-lucide="terminal" style="width:11px;height:11px"></i> CLI Commands</a>
+        <a class="toc-link sub" href="#shell"><i data-lucide="chevron-right" style="width:11px;height:11px"></i> Query
+          Shell</a>
+        <a class="toc-link" href="#create"><i data-lucide="plus-square" style="width:11px;height:11px"></i> CREATE
+          TABLE</a>
+        <a class="toc-link" href="#insert"><i data-lucide="arrow-down-circle" style="width:11px;height:11px"></i> INSERT
+          INTO</a>
+        <a class="toc-link" href="#select"><i data-lucide="search" style="width:11px;height:11px"></i> SELECT</a>
+        <a class="toc-link sub" href="#where"><i data-lucide="filter" style="width:11px;height:11px"></i> WHERE &amp;
+          Logic</a>
+        <a class="toc-link sub" href="#orderby"><i data-lucide="arrow-up-down" style="width:11px;height:11px"></i> ORDER
+          BY / LIMIT</a>
+        <a class="toc-link sub" href="#aggregates"><i data-lucide="bar-chart-2" style="width:11px;height:11px"></i>
+          Aggregates</a>
+        <a class="toc-link" href="#update"><i data-lucide="edit-2" style="width:11px;height:11px"></i> UPDATE</a>
+        <a class="toc-link" href="#delete"><i data-lucide="trash" style="width:11px;height:11px"></i> DELETE</a>
+        <a class="toc-link" href="#sdk"><i data-lucide="code-2" style="width:11px;height:11px"></i> Node.js SDK</a>
+        <a class="toc-link" href="#types"><i data-lucide="type" style="width:11px;height:11px"></i> Data Types</a>
+        <a class="toc-link sub" href="#operators"><i data-lucide="sliders" style="width:11px;height:11px"></i>
+          Operators</a>
+        <a class="toc-link sub" href="#storage-format"><i data-lucide="hard-drive" style="width:11px;height:11px"></i>
+          Storage Format</a>
+        <a class="toc-link sub" href="#errors"><i data-lucide="alert-circle" style="width:11px;height:11px"></i>
+          Errors</a>
+        <a class="toc-link sub" href="#limits"><i data-lucide="alert-triangle" style="width:11px;height:11px"></i>
+          Limitations</a>
+      </div>
 
-  <!-- QUICK REF CHEATSHEET -->
-  <div class="quick-ref">
-    <div class="qr-label"><i data-lucide="zap" style="width:11px;height:11px"></i> Cheat Sheet</div>
+      <!-- QUICK REF CHEATSHEET -->
+      <div class="quick-ref">
+        <div class="qr-label"><i data-lucide="zap" style="width:11px;height:11px"></i> Cheat Sheet</div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="plus-square" style="width:10px;height:10px"></i> Create</div>
-      <div class="qr-pre"><span class="kw">CREATE TABLE</span> <span class="tb">t</span> <span class="op">(</span>
-  id <span class="kw">INT PRIMARY KEY</span><span class="op">,</span>
-  name <span class="kw">TEXT</span>
-<span class="op">);</span></div>
-    </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="plus-square" style="width:10px;height:10px"></i> Create</div>
+          <div class="qr-pre"><span class="kw">CREATE TABLE</span> <span class="tb">t</span> <span class="op">(</span>
+            id <span class="kw">INT PRIMARY KEY</span><span class="op">,</span>
+            name <span class="kw">TEXT</span>
+            <span class="op">);</span>
+          </div>
+        </div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="arrow-down-circle" style="width:10px;height:10px"></i> Insert</div>
-      <div class="qr-pre"><span class="kw">INSERT INTO</span> <span class="tb">t</span> <span class="op">(</span>name<span class="op">)</span>
-<span class="kw">VALUES</span> <span class="op">(</span><span class="str">'Alice'</span><span class="op">);</span></div>
-    </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="arrow-down-circle" style="width:10px;height:10px"></i> Insert</div>
+          <div class="qr-pre"><span class="kw">INSERT INTO</span> <span class="tb">t</span> <span
+              class="op">(</span>name<span class="op">)</span>
+            <span class="kw">VALUES</span> <span class="op">(</span><span class="str">'Alice'</span><span
+              class="op">);</span>
+          </div>
+        </div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="search" style="width:10px;height:10px"></i> Select</div>
-      <div class="qr-pre"><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="tb">t</span>
-<span class="kw">WHERE</span> id <span class="op">&gt;</span> <span class="num">1</span>
-<span class="kw">ORDER BY</span> name <span class="kw">ASC</span>
-<span class="kw">LIMIT</span> <span class="num">10</span><span class="op">;</span></div>
-    </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="search" style="width:10px;height:10px"></i> Select</div>
+          <div class="qr-pre"><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span>
+            <span class="tb">t</span>
+            <span class="kw">WHERE</span> id <span class="op">&gt;</span> <span class="num">1</span>
+            <span class="kw">ORDER BY</span> name <span class="kw">ASC</span>
+            <span class="kw">LIMIT</span> <span class="num">10</span><span class="op">;</span>
+          </div>
+        </div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="bar-chart-2" style="width:10px;height:10px"></i> Aggregate</div>
-      <div class="qr-pre"><span class="kw">SELECT</span> <span class="kw">COUNT</span><span class="op">(*)</span> <span class="kw">AS</span> n<span class="op">,</span>
-  <span class="kw">AVG</span><span class="op">(</span>age<span class="op">)</span> <span class="kw">AS</span> avg
-<span class="kw">FROM</span> <span class="tb">t</span><span class="op">;</span></div>
-    </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="bar-chart-2" style="width:10px;height:10px"></i> Aggregate</div>
+          <div class="qr-pre"><span class="kw">SELECT</span> <span class="kw">COUNT</span><span class="op">(*)</span>
+            <span class="kw">AS</span> n<span class="op">,</span>
+            <span class="kw">AVG</span><span class="op">(</span>age<span class="op">)</span> <span class="kw">AS</span>
+            avg
+            <span class="kw">FROM</span> <span class="tb">t</span><span class="op">;</span>
+          </div>
+        </div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="edit-2" style="width:10px;height:10px"></i> Update</div>
-      <div class="qr-pre"><span class="kw">UPDATE</span> <span class="tb">t</span> <span class="kw">SET</span>
-  name <span class="op">=</span> <span class="str">'Bob'</span>
-<span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span class="op">;</span></div>
-    </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="edit-2" style="width:10px;height:10px"></i> Update</div>
+          <div class="qr-pre"><span class="kw">UPDATE</span> <span class="tb">t</span> <span class="kw">SET</span>
+            name <span class="op">=</span> <span class="str">'Bob'</span>
+            <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span
+              class="op">;</span>
+          </div>
+        </div>
 
-    <div class="qr-block">
-      <div class="qr-bar"><i data-lucide="trash" style="width:10px;height:10px"></i> Delete</div>
-      <div class="qr-pre"><span class="kw">DELETE FROM</span> <span class="tb">t</span>
-<span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span class="op">;</span></div>
-    </div>
-  </div>
+        <div class="qr-block">
+          <div class="qr-bar"><i data-lucide="trash" style="width:10px;height:10px"></i> Delete</div>
+          <div class="qr-pre"><span class="kw">DELETE FROM</span> <span class="tb">t</span>
+            <span class="kw">WHERE</span> id <span class="op">=</span> <span class="num">1</span><span
+              class="op">;</span>
+          </div>
+        </div>
+      </div>
 
-  <!-- PROJECT STATS -->
-  <div class="stats-strip">
-    <div class="qr-label" style="margin-bottom:8px"><i data-lucide="activity" style="width:11px;height:11px"></i> Project</div>
-    <div class="stat-row"><span class="stat-label-r"><i data-lucide="test-tube-2" style="width:11px;height:11px"></i> Tests passing</span><span class="stat-val">46 / 46</span></div>
-    <div class="stat-row"><span class="stat-label-r"><i data-lucide="package" style="width:11px;height:11px"></i> Version</span><span class="stat-val">1.1.0</span></div>
-    <div class="stat-row"><span class="stat-label-r"><i data-lucide="scale" style="width:11px;height:11px"></i> License</span><span class="stat-val">MIT</span></div>
-    <div class="stat-row"><span class="stat-label-r"><i data-lucide="zap" style="width:11px;height:11px"></i> Node.js</span><span class="stat-val">≥ 14</span></div>
-    <div class="stat-row"><span class="stat-label-r"><i data-lucide="code-2" style="width:11px;height:11px"></i> SQL ops</span><span class="stat-val">7</span></div>
-  </div>
-</aside>
+      <!-- PROJECT STATS -->
+      <div class="stats-strip">
+        <div class="qr-label" style="margin-bottom:8px"><i data-lucide="activity" style="width:11px;height:11px"></i>
+          Project</div>
+        <div class="stat-row"><span class="stat-label-r"><i data-lucide="test-tube-2"
+              style="width:11px;height:11px"></i> Tests passing</span><span class="stat-val">46 / 46</span></div>
+        <div class="stat-row"><span class="stat-label-r"><i data-lucide="package" style="width:11px;height:11px"></i>
+            Version</span><span class="stat-val">1.1.0</span></div>
+        <div class="stat-row"><span class="stat-label-r"><i data-lucide="scale" style="width:11px;height:11px"></i>
+            License</span><span class="stat-val">MIT</span></div>
+        <div class="stat-row"><span class="stat-label-r"><i data-lucide="zap" style="width:11px;height:11px"></i>
+            Node.js</span><span class="stat-val">≥ 14</span></div>
+        <div class="stat-row"><span class="stat-label-r"><i data-lucide="code-2" style="width:11px;height:11px"></i> SQL
+            ops</span><span class="stat-val">7</span></div>
+      </div>
+    </aside>
 
-</div><!-- end docs-layout -->
+  </div><!-- end docs-layout -->
 
-<script>
-lucide.createIcons();
+  <script>
+    lucide.createIcons();
 
-// Active sidebar + TOC tracking
-const allSections = document.querySelectorAll('.doc-section,[id]');
-const sideLinks = document.querySelectorAll('.sidebar-link');
-const tocLinks  = document.querySelectorAll('.toc-link');
+    // Active sidebar + TOC tracking
+    const allSections = document.querySelectorAll('.doc-section,[id]');
+    const sideLinks = document.querySelectorAll('.sidebar-link');
+    const tocLinks = document.querySelectorAll('.toc-link');
 
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const id = e.target.id;
-      sideLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
-      tocLinks.forEach(l  => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          sideLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+          tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { rootMargin: '-15% 0px -75% 0px' });
+
+    document.querySelectorAll('[id]').forEach(el => io.observe(el));
+
+    // Copy code
+    function copyCode(btn) {
+      const pre = btn.closest('.cb').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).catch(() => { });
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> copied!';
+      btn.style.color = 'var(--green)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; lucide.createIcons(); }, 1800);
     }
-  });
-}, { rootMargin: '-15% 0px -75% 0px' });
-
-document.querySelectorAll('[id]').forEach(el => io.observe(el));
-
-// Copy code
-function copyCode(btn) {
-  const pre = btn.closest('.cb').querySelector('pre');
-  navigator.clipboard.writeText(pre.innerText).catch(() => {});
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> copied!';
-  btn.style.color = 'var(--green)';
-  setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; lucide.createIcons(); }, 1800);
-}
-</script>
+  </script>
 </body>
+
 </html>
