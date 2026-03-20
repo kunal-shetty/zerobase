@@ -1,0 +1,28 @@
+{
+  "name": "zerobase-cli",
+  "version": "1.0.0",
+  "description": "A CLI-first, SQL-driven local database system using JSON files — no server required.",
+  "main": "src/index.js",
+  "bin": {
+    "zerobase": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "sql",
+    "cli",
+    "database",
+    "json",
+    "nosql",
+    "local-db"
+  ],
+  "author": "Kunal",
+  "license": "MIT",
+  "dependencies": {
+    "boxen": "^5.1.2",
+    "chalk": "^4.1.2",
+    "figlet": "^1.11.0",
+    "gradient-string": "^2.0.2"
+  }
+}
