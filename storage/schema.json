@@ -1,0 +1,10 @@
+{
+  "products": {
+    "columns": {
+      "id": "number",
+      "name": "string",
+      "price": "number"
+    },
+    "primaryKey": "id"
+  }
+}

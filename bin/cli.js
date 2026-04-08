@@ -250,6 +250,7 @@ function cmdHelp() {
   ${chalk.cyan("zerobase tables")}                List all tables
   ${chalk.cyan("zerobase describe <table>")}      Show table schema + row count
   ${chalk.cyan("zerobase drop <table>")}          Drop a table
+  ${chalk.cyan("zerobase dashboard")}              Open the web dashboard  ${chalk.dim("(browser UI)")}
   ${chalk.cyan("zerobase help")}                  Show this help
 
   ${chalk.bold("Shell commands")}
@@ -342,14 +343,35 @@ function cmdQuery() {
   });
 }
 
+// ── Dashboard server ────────────────────────────────────────────
+const DashboardSERVE_PORT = 3000;
+
+function cmdDashboard() {
+  const { execSync } = require("child_process");
+  const port = DashboardSERVE_PORT;
+  console.log();
+  ok(`Launching ZeroBase Dashboard at ${chalk.cyan(`http://localhost:${port}`)}...`);
+  console.log();
+  try {
+    execSync(`node "${path.resolve(__dirname, "..", "server.js")}" --port ${port}`, {
+      stdio: "inherit",
+      cwd: process.cwd(),
+    });
+  } catch (e) {
+    // User cancelled or errored
+  }
+  process.exit(0);
+}
+
 // ── Main ──────────────────────────────────────────────────────────
 const [,, command, ...args] = process.argv;
 switch (command) {
-  case "init":     cmdInit(); break;
-  case "query":    cmdQuery(); break;
-  case "tables":   cmdTables(); break;
-  case "describe": cmdDescribe(args[0]); break;
-  case "drop":     cmdDrop(args[0]); break;
+  case "init":      cmdInit(); break;
+  case "query":     cmdQuery(); break;
+  case "tables":    cmdTables(); break;
+  case "describe":  cmdDescribe(args[0]); break;
+  case "drop":      cmdDrop(args[0]); break;
+  case "dashboard": cmdDashboard(); break;
   case "help": case "--help": case "-h": cmdHelp(); break;
   default:
     if (!command) { banner(); cmdHelp(); }

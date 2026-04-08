@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeroBase Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+    --border: #30363d; --text: #e6edf3; --muted: #8b949e;
+    --cyan: #39d0d8; --blue: #58a6ff; --green: #3fb950;
+    --yellow: #d29922; --red: #f85149; --purple: #a371f7;
+    --font: 'Segoe UI', system-ui, sans-serif;
+    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    --radius: 6px; --sidebar-w: 260px;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; overflow: hidden; }
+
+  /* ── Layout ── */
+  #app { display: flex; height: 100vh; }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--bg2);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  #sidebar-header {
+    padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
+  }
+  #sidebar-header .logo {
+    width: 28px; height: 28px; background: linear-gradient(135deg, var(--cyan), var(--blue));
+    border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #fff;
+  }
+  #sidebar-header span { font-weight: 700; font-size: 15px; color: var(--text); }
+  #sidebar-header .version { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+  #db-selector { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  #db-selector label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+  #db-selector select { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 6px 10px; font-size: 13px; cursor: pointer; outline: none; }
+
+  #pg-config { padding: 12px 16px; border-bottom: 1px solid var(--border); display: none; }
+  #pg-config label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
+  #pg-config input { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 5px 8px; font-size: 12px; margin-bottom: 6px; outline: none; }
+  #pg-config input:focus { border-color: var(--cyan); }
+  #pg-connect-btn {
+    width: 100%; background: linear-gradient(135deg, var(--cyan), var(--blue)); border: none; border-radius: var(--radius);
+    color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer; margin-top: 4px;
+  }
+
+  #tables-section { flex: 1; overflow-y: auto; }
+  #tables-section .section-label {
+    padding: 10px 16px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  #tables-list { list-style: none; }
+  #tables-list li {
+    padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    border-left: 3px solid transparent; transition: background .1s;
+  }
+  #tables-list li:hover { background: var(--bg3); }
+  #tables-list li.active { background: rgba(57,208,216,.08); border-left-color: var(--cyan); color: var(--cyan); }
+  #tables-list li .table-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  #tables-list li .row-count { margin-left: auto; font-size: 11px; color: var(--muted); }
+  #no-tables-msg { padding: 20px 16px; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+  #sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+  #sidebar-footer button {
+    flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    color: var(--text); font-size: 12px; padding: 6px 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  #sidebar-footer button:hover { border-color: var(--cyan); color: var(--cyan); }
+  #sidebar-footer button.primary { background: rgba(57,208,216,.12); border-color: rgba(57,208,216,.3); color: var(--cyan); }
+
+  /* ── Main content ── */
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── Top bar ── */
+  #topbar {
+    padding: 0 20px; height: 48px; background: var(--bg2); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0;
+  }
+  #breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  #breadcrumb .db-name { color: var(--cyan); }
+  #breadcrumb .sep { color: var(--border); }
+  #breadcrumb .table-name { color: var(--text); font-weight: 600; }
+  #topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  #status-badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    background: rgba(63,185,80,.12); color: var(--green); border: 1px solid rgba(63,185,80,.3);
+  }
+  #status-badge.disconnected { background: rgba(248,81,73,.12); color: var(--red); border-color: rgba(248,81,73,.3); }
+
+  /* ── Tabs ── */
+  #tabs { display: flex; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 20px; }
+  .tab {
+    padding: 10px 18px; font-size: 13px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s; user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--cyan); border-bottom-color: var(--cyan); font-weight: 600; }
+
+  /* ── Content panels ── */
+  #content { flex: 1; overflow: hidden; position: relative; }
+  .panel { position: absolute; inset: 0; display: none; flex-direction: column; overflow: hidden; }
+  .panel.active { display: flex; }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    padding: 10px 20px; background: var(--bg2); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toolbar button {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    color: var(--text); font-size: 12px; padding: 5px 12px; cursor: pointer; display: flex; align-items: center; gap: 5px;
+  }
+  .toolbar button:hover { border-color: var(--cyan); color: var(--cyan); }
+  .toolbar button.danger:hover { border-color: var(--red); color: var(--red); }
+  .toolbar .search-wrap { margin-left: auto; display: flex; align-items: center; gap: 6px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 10px; }
+  .toolbar .search-wrap input { background: transparent; border: none; color: var(--text); font-size: 12px; padding: 5px 0; outline: none; width: 180px; }
+  .toolbar .search-wrap input::placeholder { color: var(--muted); }
+
+  /* ── Data grid ── */
+  #data-grid-wrap { flex: 1; overflow: auto; padding: 0; }
+  #data-grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+  #data-grid th {
+    background: var(--bg2); color: var(--cyan); font-weight: 600; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .04em; padding: 10px 16px; text-align: left; white-space: nowrap; position: sticky; top: 0;
+    border-bottom: 2px solid var(--border); border-right: 1px solid var(--border);
+  }
+  #data-grid th:last-child { border-right: none; }
+  #data-grid td {
+    padding: 8px 16px; border-bottom: 1px solid var(--border); max-width: 300px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 12px;
+    border-right: 1px solid var(--border);
+  }
+  #data-grid td:last-child { border-right: none; }
+  #data-grid tr:hover td { background: rgba(57,208,216,.04); }
+  #data-grid .null-val { color: var(--muted); font-style: italic; }
+  #data-grid .num-val { color: var(--yellow); }
+  #data-grid .bool-val { color: var(--purple); }
+  #data-grid .str-val { color: var(--green); }
+  #no-data-msg { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+
+  /* ── Structure panel ── */
+  #structure-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  #structure-table th {
+    background: var(--bg2); color: var(--cyan); font-weight: 600; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .04em; padding: 10px 16px; text-align: left; position: sticky; top: 0;
+    border-bottom: 2px solid var(--border);
+  }
+  #structure-table td { padding: 8px 16px; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 12px; }
+  #structure-table .pk-badge {
+    display: inline-block; background: rgba(210,153,34,.15); color: var(--yellow); border: 1px solid rgba(210,153,34,.3);
+    border-radius: 4px; font-size: 10px; padding: 1px 6px; font-weight: 700; letter-spacing: .04em;
+  }
+  #structure-table .type-badge {
+    display: inline-block; background: rgba(88,166,255,.1); color: var(--blue); border: 1px solid rgba(88,166,255,.25);
+    border-radius: 4px; font-size: 11px; padding: 1px 6px; font-weight: 600;
+  }
+
+  /* ── SQL panel ── */
+  #sql-panel { display: flex; flex-direction: column; }
+  #query-editor {
+    padding: 12px 20px; background: var(--bg2); border-bottom: 1px solid var(--border);
+  }
+  #query-editor .editor-wrap {
+    display: flex; gap: 8px; margin-bottom: 8px;
+  }
+  #query-editor textarea {
+    flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    color: var(--green); font-family: var(--mono); font-size: 13px; padding: 10px 14px; resize: none;
+    outline: none; min-height: 80px; line-height: 1.5;
+  }
+  #query-editor textarea:focus { border-color: var(--cyan); }
+  #query-editor textarea::placeholder { color: var(--muted); }
+  #query-editor .btn-run {
+    background: linear-gradient(135deg, var(--cyan), var(--blue)); border: none; border-radius: var(--radius);
+    color: #fff; font-size: 13px; font-weight: 700; padding: 10px 20px; cursor: pointer; align-self: flex-end;
+    display: flex; align-items: center; gap: 6px;
+  }
+  #query-editor .btn-run:hover { opacity: .85; }
+  #query-editor .editor-hint { font-size: 11px; color: var(--muted); }
+  #query-results { flex: 1; overflow: auto; }
+  #query-error {
+    padding: 12px 20px; background: rgba(248,81,73,.08); border-bottom: 1px solid rgba(248,81,73,.25);
+    color: var(--red); font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    display: none;
+  }
+  #query-error.show { display: block; }
+  #query-success {
+    padding: 10px 20px; background: rgba(63,185,80,.08); border-bottom: 1px solid rgba(63,185,80,.2);
+    color: var(--green); font-size: 12px; display: none;
+  }
+  #query-success.show { display: block; }
+  #query-meta {
+    padding: 8px 20px; background: var(--bg2); border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--muted); display: flex; gap: 20px;
+  }
+  #query-meta strong { color: var(--text); }
+
+  /* ── Create table modal ── */
+  #modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+  }
+  #modal-overlay.show { display: flex; }
+  #modal {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+    width: 560px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  #modal-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
+  }
+  #modal-header h3 { font-size: 15px; font-weight: 700; }
+  #modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
+  #modal-close:hover { color: var(--text); }
+  #modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+  #modal-body label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  #modal-body input, #modal-body select {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    border-radius: var(--radius); padding: 8px 12px; font-size: 13px; margin-bottom: 14px; outline: none;
+  }
+  #modal-body input:focus, #modal-body select:focus { border-color: var(--cyan); }
+  #col-list { margin-bottom: 14px; }
+  .col-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .col-row input { width: 140px; margin-bottom: 0; }
+  .col-row select { width: 110px; margin-bottom: 0; }
+  .col-row .pk-check { width: auto; margin: 0; display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .col-row .del-col {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); width: 28px; height: 28px;
+    color: var(--red); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px;
+  }
+  #add-col-btn { background: var(--bg3); border: 1px dashed var(--border); border-radius: var(--radius); width: 100%; padding: 7px; color: var(--muted); cursor: pointer; font-size: 12px; }
+  #add-col-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  #modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+  #modal-footer button {
+    padding: 8px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  #modal-footer .cancel-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  #modal-footer .cancel-btn:hover { color: var(--text); }
+  #modal-footer .create-btn { background: linear-gradient(135deg, var(--cyan), var(--blue)); border: none; color: #fff; }
+  #modal-footer .create-btn:hover { opacity: .85; }
+
+  /* ── Scrollbars ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 18px; font-size: 13px; z-index: 200; display: none;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  }
+  #toast.show { display: block; }
+  #toast.success { border-color: rgba(63,185,80,.4); color: var(--green); }
+  #toast.error { border-color: rgba(248,81,73,.4); color: var(--red); }
+
+  /* ── SQL keywords highlighting ── */
+  .sql-kw { color: var(--blue); font-weight: 600; }
+  .sql-fn { color: var(--purple); }
+  .sql-str { color: var(--green); }
+  .sql-num { color: var(--yellow); }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div class="logo">ZB</div>
+      <span>ZeroBase</span>
+      <span class="version">v1.1.0</span>
+    </div>
+
+    <div id="db-selector">
+      <label>Storage Backend</label>
+      <select id="db-type">
+        <option value="json">JSON Files</option>
+        <option value="postgres">PostgreSQL</option>
+      </select>
+    </div>
+
+    <div id="pg-config">
+      <label>Host</label>
+      <input id="pg-host" placeholder="localhost">
+      <label>Port</label>
+      <input id="pg-port" placeholder="5432" value="5432">
+      <label>Database</label>
+      <input id="pg-db" placeholder="zerobase">
+      <label>User</label>
+      <input id="pg-user" placeholder="postgres">
+      <label>Password</label>
+      <input id="pg-pass" type="password" placeholder="••••••••">
+      <button id="pg-connect-btn">Connect to PostgreSQL</button>
+    </div>
+
+    <div id="tables-section">
+      <div class="section-label">
+        <span>Tables</span>
+        <span id="table-count" style="font-size:10px;color:var(--muted)"></span>
+      </div>
+      <ul id="tables-list"></ul>
+      <div id="no-tables-msg">
+        No tables yet.<br>Create one to get started.
+      </div>
+    </div>
+
+    <div id="sidebar-footer">
+      <button id="btn-new-table" class="primary" title="New Table">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        New Table
+      </button>
+      <button id="btn-refresh" title="Refresh">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main">
+
+    <!-- Top bar -->
+    <div id="topbar">
+      <div id="breadcrumb">
+        <span class="db-name" id="topbar-db">—</span>
+        <span class="sep">/</span>
+        <span class="table-name" id="topbar-table">Select a table</span>
+      </div>
+      <div id="topbar-actions">
+        <span id="status-badge" class="disconnected">Not initialized</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div id="tabs">
+      <div class="tab active" data-tab="browse">Browse</div>
+      <div class="tab" data-tab="structure">Structure</div>
+      <div class="tab" data-tab="sql">SQL</div>
+    </div>
+
+    <!-- Content -->
+    <div id="content">
+
+      <!-- Browse panel -->
+      <div class="panel active" id="panel-browse">
+        <div class="toolbar">
+          <button id="btn-insert-row" title="Insert Row">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Insert Row
+          </button>
+          <button id="btn-delete-rows" class="danger" title="Delete Selected">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            Delete Rows
+          </button>
+          <div class="search-wrap">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="grid-search" type="text" placeholder="Filter rows...">
+          </div>
+          <span id="row-count-label" style="margin-left:auto;font-size:12px;color:var(--muted)"></span>
+        </div>
+        <div id="data-grid-wrap">
+          <table id="data-grid">
+            <thead id="grid-head"></thead>
+            <tbody id="grid-body"></tbody>
+          </table>
+          <div id="no-data-msg" style="display:none">No rows found. Insert some data to get started.</div>
+        </div>
+      </div>
+
+      <!-- Structure panel -->
+      <div class="panel" id="panel-structure">
+        <div id="struct-table-wrap" style="overflow:auto;flex:1">
+          <table id="structure-table">
+            <thead><tr><th>Column</th><th>Type</th><th>Constraint</th></tr></thead>
+            <tbody id="struct-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SQL panel -->
+      <div class="panel" id="panel-sql">
+        <div id="sql-panel">
+          <div id="query-editor">
+            <div class="editor-wrap">
+              <textarea id="sql-input" placeholder="SELECT * FROM users; -- press Ctrl+Enter to run" spellcheck="false"></textarea>
+              <button class="btn-run" id="btn-run-sql">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Run
+              </button>
+            </div>
+            <div class="editor-hint">Press <kbd style="background:var(--bg3);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">Ctrl+Enter</kbd> to execute &nbsp;·&nbsp; <kbd style="background:var(--bg3);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">↑↓</kbd> history</div>
+          </div>
+          <div id="query-error"></div>
+          <div id="query-success"></div>
+          <div id="query-meta" style="display:none">
+            <span>Rows: <strong id="q-rows-count">0</strong></span>
+            <span>Time: <strong id="q-time"></strong></span>
+          </div>
+          <div id="query-results"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Create Table Modal -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div id="modal-header">
+      <h3>Create Table</h3>
+      <button id="modal-close">×</button>
+    </div>
+    <div id="modal-body">
+      <label>Table Name</label>
+      <input id="new-table-name" type="text" placeholder="users">
+      <label>Columns</label>
+      <div id="col-list">
+        <div class="col-row">
+          <input class="col-name" placeholder="id" value="id">
+          <select class="col-type">
+            <option>INT</option><option>TEXT</option><option>FLOAT</option><option>BOOL</option>
+          </select>
+          <label class="pk-check" style="margin-bottom:0;white-space:nowrap"><input type="checkbox" class="col-pk" checked> Primary Key</label>
+          <button class="del-col">×</button>
+        </div>
+      </div>
+      <button id="add-col-btn">+ Add Column</button>
+    </div>
+    <div id="modal-footer">
+      <button class="cancel-btn" id="modal-cancel">Cancel</button>
+      <button class="create-btn" id="modal-create">Create Table</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+// ZeroBase Dashboard JS
+// ──────────────────────────────────────────────────────────────
+
+const API_BASE = '/api';
+
+// ── State ──
+let state = {
+  dbType: 'json',          // 'json' | 'postgres'
+  pgConfig: null,
+  tables: [],              // [{ name, rowCount }]
+  currentTable: null,
+  currentRows: [],
+  schema: {},              // tableName → { columns, primaryKey }
+  sqlHistory: [],
+  sqlHistoryIdx: -1,
+};
+
+// ── DOM refs ──
+const $ = id => document.getElementById(id);
+const dbTypeSelect      = $('db-type');
+const pgConfigEl        = $('pg-config');
+const pgHost            = $('pg-host');
+const pgPort            = $('pg-port');
+const pgDb              = $('pg-db');
+const pgUser            = $('pg-user');
+const pgPass            = $('pg-pass');
+const pgConnectBtn      = $('pg-connect-btn');
+const tablesList        = $('tables-list');
+const tableCount        = $('table-count');
+const noTablesMsg       = $('no-tables-msg');
+const topbarDb          = $('topbar-db');
+const topbarTable       = $('topbar-table');
+const statusBadge       = $('status-badge');
+const tabs              = document.querySelectorAll('.tab');
+const panels            = document.querySelectorAll('.panel');
+const gridHead          = $('grid-head');
+const gridBody          = $('grid-body');
+const gridWrap          = $('data-grid-wrap');
+const noDataMsg         = $('no-data-msg');
+const rowCountLabel     = $('row-count-label');
+const structBody        = $('struct-body');
+const sqlInput          = $('sql-input');
+const btnRunSql         = $('btn-run-sql');
+const queryError        = $('query-error');
+const querySuccess      = $('query-success');
+const queryMeta         = $('query-meta');
+const qRowsCount        = $('q-rows-count');
+const qTime             = $('q-time');
+const queryResults      = $('query-results');
+const modalOverlay      = $('modal-overlay');
+const modalClose        = $('modal-close');
+const modalCancel       = $('modal-cancel');
+const modalCreate       = $('modal-create');
+const newTableName      = $('new-table-name');
+const colList           = $('col-list');
+const addColBtn         = $('add-col-btn');
+const gridSearch        = $('grid-search');
+const toast             = $('toast');
+
+// ── Toast ──
+let toastTimer;
+function showToast(msg, type = 'success') {
+  toast.textContent = msg;
+  toast.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.className = ''; }, 3000);
+}
+
+// ── API helper ──
+async function api(method, endpoint, body) {
+  const res = await fetch(`${API_BASE}/${endpoint}`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+// ── Init / Load ──
+async function initDashboard() {
+  await loadTables();
+  checkStatus();
+}
+
+async function checkStatus() {
+  try {
+    const data = await api('GET', 'status');
+    if (data.initialized) {
+      statusBadge.textContent = data.dbType === 'postgres' ? 'PostgreSQL' : 'JSON Files';
+      statusBadge.className = '';
+      statusBadge.style.background = 'rgba(63,185,80,.12)';
+      statusBadge.style.color = 'var(--green)';
+      statusBadge.style.border = '1px solid rgba(63,185,80,.3)';
+    } else {
+      setDisconnected();
+    }
+  } catch {
+    setDisconnected();
+  }
+}
+
+function setDisconnected() {
+  statusBadge.textContent = 'Not initialized';
+  statusBadge.className = 'disconnected';
+  topbarDb.textContent = '—';
+  topbarTable.textContent = 'Run zerobase init';
+}
+
+async function loadTables() {
+  try {
+    const data = await api('GET', 'tables');
+    state.tables = data.tables;
+    state.schema = data.schema || {};
+    renderTableList();
+  } catch (e) {
+    state.tables = [];
+    state.schema = {};
+    renderTableList();
+  }
+}
+
+function renderTableList() {
+  tablesList.innerHTML = '';
+  noTablesMsg.style.display = state.tables.length ? 'none' : 'block';
+  tableCount.textContent = state.tables.length ? `(${state.tables.length})` : '';
+
+  state.tables.forEach(t => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span class="table-icon">▤</span>
+      <span class="tname">${t.name}</span>
+      <span class="row-count">${t.rowCount ?? '?'} rows</span>
+    `;
+    if (state.currentTable === t.name) li.className = 'active';
+    li.addEventListener('click', () => selectTable(t.name));
+    tablesList.appendChild(li);
+  });
+
+  if (!state.currentTable && state.tables.length > 0) {
+    selectTable(state.tables[0].name);
+  }
+}
+
+async function selectTable(name) {
+  state.currentTable = name;
+  topbarDb.textContent = state.dbType === 'postgres' ? 'PostgreSQL' : 'JSON';
+  topbarTable.textContent = name;
+
+  // Highlight in list
+  tablesList.querySelectorAll('li').forEach(li => {
+    li.classList.toggle('active', li.querySelector('.tname').textContent === name);
+  });
+
+  // Switch to browse tab
+  switchTab('browse');
+  await loadTableData(name);
+  renderStructure(name);
+}
+
+async function loadTableData(name) {
+  try {
+    const data = await api('POST', 'query', {
+      sql: `SELECT * FROM ${name};`
+    });
+    state.currentRows = data.rows || [];
+    renderGrid(state.currentRows);
+  } catch (e) {
+    state.currentRows = [];
+    renderGrid([]);
+  }
+}
+
+function renderGrid(rows) {
+  const search = gridSearch.value.toLowerCase();
+  const filtered = search
+    ? rows.filter(row => Object.values(row).some(v => String(v).toLowerCase().includes(search)))
+    : rows;
+
+  rowCountLabel.textContent = `${filtered.length} row${filtered.length !== 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    gridHead.innerHTML = '';
+    gridBody.innerHTML = '';
+    gridWrap.style.display = 'none';
+    noDataMsg.style.display = 'block';
+    return;
+  }
+
+  gridWrap.style.display = 'table';
+  noDataMsg.style.display = 'none';
+
+  // Build header
+  const cols = Object.keys(filtered[0] || {});
+  gridHead.innerHTML = '<tr>' + cols.map(c => `<th>${escapeHtml(c)}</th>`).join('') + '</tr>';
+
+  // Build body
+  gridBody.innerHTML = filtered.map(row => {
+    return '<tr>' + cols.map(c => {
+      const val = row[c];
+      if (val === null || val === undefined) return `<td class="null-val">NULL</td>`;
+      const type = typeof val;
+      if (type === 'number') return `<td class="num-val">${escapeHtml(String(val))}</td>`;
+      if (type === 'boolean') return `<td class="bool-val">${val ? 'true' : 'false'}</td>`;
+      return `<td class="str-val" title="${escapeHtml(String(val))}">${escapeHtml(String(val))}</td>`;
+    }).join('') + '</tr>';
+  }).join('');
+}
+
+function renderStructure(name) {
+  const schema = state.schema[name];
+  structBody.innerHTML = '';
+  if (!schema || !schema.columns) return;
+
+  Object.entries(schema.columns).forEach(([col, type]) => {
+    const tr = document.createElement('tr');
+    const isPK = schema.primaryKey === col;
+    tr.innerHTML = `
+      <td>${escapeHtml(col)}</td>
+      <td><span class="type-badge">${type === 'number' ? 'INT / FLOAT' : type.toUpperCase()}</span></td>
+      <td>${isPK ? '<span class="pk-badge">PRIMARY KEY</span>' : '—'}</td>
+    `;
+    structBody.appendChild(tr);
+  });
+}
+
+// ── SQL Panel ──
+async function runSql(sql) {
+  queryError.classList.remove('show');
+  querySuccess.classList.remove('show');
+  queryResults.innerHTML = '';
+  queryMeta.style.display = 'none';
+
+  const start = Date.now();
+  try {
+    const data = await api('POST', 'query', { sql });
+    const elapsed = Date.now() - start;
+
+    if (data.rows !== undefined) {
+      // SELECT result
+      queryMeta.style.display = 'flex';
+      qRowsCount.textContent = data.rows.length;
+      qTime.textContent = elapsed < 1000 ? `${elapsed}ms` : `${(elapsed/1000).toFixed(2)}s`;
+
+      if (!data.rows.length) {
+        queryResults.innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">(no rows)</div>';
+      } else {
+        const cols = Object.keys(data.rows[0]);
+        const table = document.createElement('table');
+        table.style.borderCollapse = 'collapse';
+        table.style.width = '100%';
+        table.style.fontSize = '13px';
+        table.innerHTML = '<thead><tr>' + cols.map(c => `<th style="background:var(--bg2);color:var(--cyan);font-weight:600;padding:8px 16px;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap">${escapeHtml(c)}</th>`).join('') + '</tr></thead>';
+        table.innerHTML += '<tbody>' + data.rows.map(row => {
+          return '<tr>' + cols.map(c => {
+            const v = row[c];
+            if (v === null || v === undefined) return `<td style="padding:7px 16px;border-bottom:1px solid var(--border);color:var(--muted);font-style:italic">NULL</td>`;
+            return `<td style="padding:7px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px">${escapeHtml(String(v))}</td>`;
+          }).join('') + '</tr>';
+        }).join('') + '</tbody>';
+        queryResults.appendChild(table);
+      }
+    } else {
+      // Mutation result
+      const msg = data.message || data.inserted ? JSON.stringify(data.inserted) : 'OK';
+      querySuccess.textContent = msg;
+      querySuccess.classList.add('show');
+      queryMeta.style.display = 'flex';
+      qRowsCount.textContent = data.count || data.updatedCount || data.deletedCount || data.inserted ? 1 : 0;
+      qTime.textContent = elapsed < 1000 ? `${elapsed}ms` : `${(elapsed/1000).toFixed(2)}s`;
+    }
+
+    // Refresh tables if DDL/DML happened
+    await loadTables();
+    if (state.currentTable) await loadTableData(state.currentTable);
+
+  } catch (e) {
+    queryError.textContent = e.message;
+    queryError.classList.add('show');
+  }
+}
+
+// ── Tab switching ──
+function switchTab(name) {
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  panels.forEach(p => p.classList.toggle('active', p.id === `panel-${name}`));
+}
+
+// ── Create Table Modal ──
+function openModal() { modalOverlay.classList.add('show'); }
+function closeModal() {
+  modalOverlay.classList.remove('show');
+  newTableName.value = '';
+  colList.innerHTML = `
+    <div class="col-row">
+      <input class="col-name" placeholder="id" value="id">
+      <select class="col-type"><option>INT</option><option>TEXT</option><option>FLOAT</option><option>BOOL</option></select>
+      <label class="pk-check" style="margin-bottom:0;white-space:nowrap"><input type="checkbox" class="col-pk" checked> Primary Key</label>
+      <button class="del-col">×</button>
+    </div>
+  `;
+  bindColDelBtns();
+}
+
+async function createTable() {
+  const name = newTableName.value.trim();
+  if (!name) { showToast('Table name required', 'error'); return; }
+  if (!/^\w+$/.test(name)) { showToast('Invalid table name', 'error'); return; }
+
+  const rows = colList.querySelectorAll('.col-row');
+  if (!rows.length) { showToast('At least one column required', 'error'); return; }
+
+  const cols = [];
+  let pkCol = null;
+  rows.forEach(row => {
+    const colName = row.querySelector('.col-name').value.trim();
+    const colType = row.querySelector('.col-type').value;
+    const isPK = row.querySelector('.col-pk').checked;
+    if (!colName) return;
+    cols.push({ name: colName, type: colType, pk: isPK });
+    if (isPK) pkCol = colName;
+  });
+
+  if (!cols.length) { showToast('At least one column required', 'error'); return; }
+
+  const colDefs = cols.map(c => `${c.name} ${c.type}${c.pk ? ' PRIMARY KEY' : ''}`).join(', ');
+  const sql = `CREATE TABLE ${name} (${colDefs});`;
+
+  try {
+    await api('POST', 'query', { sql });
+    closeModal();
+    showToast(`Table "${name}" created`);
+    await loadTables();
+    selectTable(name);
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+function bindColDelBtns() {
+  colList.querySelectorAll('.del-col').forEach(btn => {
+    btn.onclick = () => {
+      if (colList.querySelectorAll('.col-row').length > 1) btn.closest('.col-row').remove();
+    };
+  });
+}
+
+// ── Insert Row Modal ──
+let insertModalOpen = false;
+async function openInsertModal() {
+  if (!state.currentTable) { showToast('Select a table first', 'error'); return; }
+
+  const schema = state.schema[state.currentTable];
+  if (!schema) { showToast('Schema not found', 'error'); return; }
+
+  // Build a simple insert prompt
+  const cols = Object.keys(schema.columns);
+  let sql = `INSERT INTO ${state.currentTable} (${cols.join(', ')}) VALUES (`;
+  sql += cols.map(c => schema.columns[c] === 'string' ? "'value'" : "0").join(', ');
+  sql += ');';
+
+  sqlInput.value = sql;
+  switchTab('sql');
+  sqlInput.focus();
+  sqlInput.selectionStart = sql.indexOf("'value'");
+  sqlInput.selectionEnd = sql.indexOf("'value'") + 7;
+}
+
+// ── Utility ──
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Event bindings ──
+dbTypeSelect.addEventListener('change', () => {
+  state.dbType = dbTypeSelect.value;
+  pgConfigEl.style.display = state.dbType === 'postgres' ? 'block' : 'none';
+});
+
+pgConnectBtn.addEventListener('click', async () => {
+  const cfg = {
+    host: pgHost.value || 'localhost',
+    port: pgPort.value || '5432',
+    database: pgDb.value || 'zerobase',
+    user: pgUser.value || 'postgres',
+    password: pgPass.value,
+  };
+  try {
+    await api('POST', 'pg/connect', cfg);
+    state.pgConfig = cfg;
+    showToast('Connected to PostgreSQL');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+});
+
+tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
+
+$('btn-new-table').addEventListener('click', openModal);
+modalClose.addEventListener('click', closeModal);
+modalCancel.addEventListener('click', closeModal);
+modalCreate.addEventListener('click', createTable);
+addColBtn.addEventListener('click', () => {
+  const row = document.createElement('div');
+  row.className = 'col-row';
+  row.innerHTML = `
+    <input class="col-name" placeholder="column_name">
+    <select class="col-type"><option>INT</option><option>TEXT</option><option>FLOAT</option><option>BOOL</option></select>
+    <label class="pk-check" style="margin-bottom:0;white-space:nowrap"><input type="checkbox" class="col-pk"> PK</label>
+    <button class="del-col">×</button>
+  `;
+  colList.appendChild(row);
+  bindColDelBtns();
+});
+
+bindColDelBtns();
+
+$('btn-refresh').addEventListener('click', async () => {
+  await loadTables();
+  if (state.currentTable) await loadTableData(state.currentTable);
+  showToast('Refreshed');
+});
+
+btnRunSql.addEventListener('click', () => {
+  const sql = sqlInput.value.trim();
+  if (!sql) return;
+  runSql(sql);
+});
+
+sqlInput.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'Enter') {
+    e.preventDefault();
+    runSql(sqlInput.value.trim());
+  }
+  if (e.key === 'ArrowUp' && e.ctrlKey) {
+    e.preventDefault();
+    if (state.sqlHistoryIdx < state.sqlHistory.length - 1) {
+      state.sqlHistoryIdx++;
+      sqlInput.value = state.sqlHistory[state.sqlHistoryIdx];
+    }
+  }
+  if (e.key === 'ArrowDown' && e.ctrlKey) {
+    e.preventDefault();
+    if (state.sqlHistoryIdx > 0) {
+      state.sqlHistoryIdx--;
+      sqlInput.value = state.sqlHistory[state.sqlHistoryIdx];
+    } else {
+      state.sqlHistoryIdx = -1;
+      sqlInput.value = '';
+    }
+  }
+});
+
+$('btn-insert-row').addEventListener('click', openInsertModal);
+
+gridSearch.addEventListener('input', () => renderGrid(state.currentRows));
+
+modalOverlay.addEventListener('click', e => {
+  if (e.target === modalOverlay) closeModal();
+});
+
+// ── Boot ──
+initDashboard();
+</script>
+</body>
+</html>
